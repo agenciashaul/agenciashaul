@@ -38,7 +38,7 @@ em{font-style:italic;font-weight:800}
 /* vetores da marca, pintados com a cor da paleta */
 .vetor{position:absolute;pointer-events:none;background:currentColor;-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center}
 .v-linhas{-webkit-mask-image:url(img/linhas.webp);mask-image:url(img/linhas.webp)}
-.v-montanha{-webkit-mask-image:url(img/montanha.webp);mask-image:url(img/montanha.webp)}
+.v-montanha{-webkit-mask-image:url(img/montanha.webp);mask-image:url(img/montanha.webp);aspect-ratio:1080/914}
 .v-estrela{-webkit-mask-image:url(img/estrela.png);mask-image:url(img/estrela.png);aspect-ratio:353/489}
 .v-estrelas{-webkit-mask-image:url(img/estrelas-duplas.png);mask-image:url(img/estrelas-duplas.png);aspect-ratio:200/298}
 .sombra-vetor{filter:drop-shadow(6px 9px 8px rgba(0,0,0,.35)) drop-shadow(20px 30px 30px rgba(0,0,0,.2))}
@@ -109,7 +109,7 @@ section{position:relative;overflow:hidden;padding:8rem var(--borda)}
 
 /* dor (bege, montanhas escuras grandes) */
 .dor{background:var(--bege);color:var(--preto)}
-.dor .v-montanha{color:var(--preto);opacity:.4;width:3400px;height:1816px;left:-700px;top:-260px}
+.dor .v-montanha{color:var(--preto);opacity:.4;width:max(1500px,115vw);left:50%;transform:translateX(-50%);top:-140px}
 .dor .rotulo{background:var(--oliva);color:#e3dbcd}
 .dor .titulo{text-shadow:var(--sombra-texto-claro)}
 .dor .titulo em{color:var(--oliva)}
@@ -168,7 +168,7 @@ section{position:relative;overflow:hidden;padding:8rem var(--borda)}
 
 /* como funciona (caramelo) */
 .passos{background:var(--caramelo);color:var(--preto)}
-.passos .v-montanha{color:var(--preto);opacity:.55;width:2300px;height:1228px;right:-900px;top:-180px}
+.passos .v-montanha{color:var(--preto);opacity:.5;width:1500px;right:-420px;top:-160px}
 .passos .rotulo{background:var(--preto);color:#e3dbcd}
 .passos .titulo{text-shadow:var(--sombra-texto-claro)}
 .passos .titulo em{color:var(--off)}
