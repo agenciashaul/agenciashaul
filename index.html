@@ -7,198 +7,264 @@
 <meta name="description" content="Seu produto é bom. Mas o seu perfil passa confiança? Nós criamos posts, carrosséis e cuidamos do seu Instagram para ele vender por você. Orçamento pelo WhatsApp.">
 <meta property="og:title" content="Agência Shaul | seu perfil passa confiança?">
 <meta property="og:description" content="Posts, carrosséis, gestão de perfil e tráfego pago. Orçamento pelo WhatsApp.">
-<meta property="og:image" content="https://agenciashaul.github.io/agenciashaul/img/og.jpg">
+<meta property="og:image" content="https://agenciashaul.com.br/img/og.jpg">
 <meta name="theme-color" content="#1E1F1F">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,400;0,6..12,700;0,6..12,800;1,6..12,700;1,6..12,800;1,6..12,900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --preto:#1E1F1F; --oliva:#38342E; --caramelo:#AD9171; --bege:#C6BDA9; --off:#EEE8E7;
-  --luz:#f4f2ee;
-  /* luz no canto de cima à esquerda: toda sombra cai para baixo e para a direita */
+  --preto:#1E1F1F; --oliva:#38342E; --caramelo:#AD9171; --bege:#C6BDA9; --off:#EEE8E7; --papel:#e3dbcd;
   --sombra-texto:1px 1px 0 rgba(0,0,0,.22), 5px 7px 12px rgba(0,0,0,.32), 16px 22px 40px rgba(0,0,0,.18);
-  --sombra-texto-claro:1px 1px 0 rgba(30,31,31,.08), 4px 6px 12px rgba(30,31,31,.14);
   --sombra-peca:6px 9px 14px rgba(0,0,0,.28), 22px 32px 50px rgba(0,0,0,.22);
   --fonte:'Nunito Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
   --borda:min(6vw,5rem);
+  --suave:cubic-bezier(.16,1,.3,1);
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
 body{background:var(--preto);color:var(--off);font-family:var(--fonte);font-size:17px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body.carregando{overflow:hidden}
 img{display:block;max-width:100%}
 a{color:inherit}
 b,strong{font-weight:800}
 em{font-style:italic;font-weight:800}
+::selection{background:var(--caramelo);color:var(--preto)}
 
-/* textura: grão fraco por cima de tudo (de longe quase não se nota) */
-.grao{position:fixed;inset:0;pointer-events:none;z-index:200;opacity:.09;mix-blend-mode:overlay;
+/* grão fraco por cima de tudo */
+.grao{position:fixed;inset:-50%;pointer-events:none;z-index:300;opacity:.08;mix-blend-mode:overlay;animation:grao 1s steps(4) infinite;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)'/%3E%3C/svg%3E")}
+@keyframes grao{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-1%)}}
 
-/* vetores da marca, pintados com a cor da paleta */
+/* vetores da marca */
 .vetor{position:absolute;pointer-events:none;background:currentColor;-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center}
 .v-linhas{-webkit-mask-image:url(img/linhas.webp);mask-image:url(img/linhas.webp)}
 .v-montanha{-webkit-mask-image:url(img/montanha.webp);mask-image:url(img/montanha.webp);aspect-ratio:1079/531;-webkit-mask-size:100% 100%;mask-size:100% 100%}
 .v-estrela{-webkit-mask-image:url(img/estrela.png);mask-image:url(img/estrela.png);aspect-ratio:353/489}
 .v-estrelas{-webkit-mask-image:url(img/estrelas-duplas.png);mask-image:url(img/estrelas-duplas.png);aspect-ratio:200/298}
 .sombra-vetor{filter:drop-shadow(6px 9px 8px rgba(0,0,0,.35)) drop-shadow(20px 30px 30px rgba(0,0,0,.2))}
+.gira{animation:gira 14s linear infinite}
+@keyframes gira{to{rotate:360deg}}
 
-/* luz de ambiente: vem de fora, do canto de cima à esquerda, sem virar bola */
-.luz{position:relative;isolation:isolate}
-.luz::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
-  background:radial-gradient(1100px 900px at -160px -160px,rgba(244,242,238,.16) 0%,rgba(244,242,238,.07) 30%,rgba(244,242,238,.02) 60%,transparent 100%)}
+/* ---------- ABERTURA ---------- */
+.abertura{position:fixed;inset:0;z-index:500;background:var(--preto);display:grid;place-items:center;transition:clip-path 1.1s var(--suave);clip-path:inset(0 0 0 0)}
+.abertura.sai{clip-path:inset(0 0 100% 0)}
+.abertura img{width:min(220px,50vw);opacity:0;transform:translateY(16px);animation:sobe .9s var(--suave) .1s forwards}
+.abertura .conta{position:absolute;right:var(--borda);bottom:2rem;font-weight:900;font-style:italic;font-size:clamp(3rem,9vw,7rem);line-height:1;color:var(--caramelo);font-variant-numeric:tabular-nums}
+.abertura .barra{position:absolute;left:var(--borda);right:var(--borda);bottom:1.2rem;height:1px;background:rgba(198,189,169,.15)}
+.abertura .barra i{display:block;height:100%;width:100%;background:var(--caramelo);transform-origin:left;transform:scaleX(0)}
+.abertura .frase{position:absolute;left:var(--borda);bottom:2.4rem;color:var(--bege);font-size:.9rem;opacity:.7}
+@keyframes sobe{to{opacity:1;transform:none}}
+
+/* ---------- CURSOR ---------- */
+.cursor{position:fixed;left:0;top:0;z-index:400;pointer-events:none;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;border:1px solid rgba(173,145,113,.7);display:grid;place-items:center;transition:width .35s var(--suave),height .35s var(--suave),margin .35s var(--suave),background .35s,border-color .35s;opacity:0}
+.cursor span{font-size:.75rem;font-weight:800;color:var(--preto);opacity:0;transition:opacity .2s}
+.cursor.link{width:64px;height:64px;margin:-32px 0 0 -32px;background:rgba(173,145,113,.18)}
+.cursor.ver{width:84px;height:84px;margin:-42px 0 0 -42px;background:var(--papel);border-color:var(--papel)}
+.cursor.ver span{opacity:1}
+@media (hover:none),(pointer:coarse){.cursor{display:none}}
 
 /* ---------- NAV ---------- */
-.nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:2rem;padding:1.1rem var(--borda);transition:background .35s,padding .35s,box-shadow .35s}
-.nav.rolou{background:rgba(30,31,31,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding-top:.75rem;padding-bottom:.75rem;box-shadow:0 1px 0 rgba(198,189,169,.08)}
-.nav-logo img{height:30px;width:auto;filter:drop-shadow(3px 4px 6px rgba(0,0,0,.35))}
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:2rem;padding:1.1rem var(--borda);transition:background .35s,padding .35s,box-shadow .35s,transform .5s var(--suave)}
+.nav.rolou{background:rgba(30,31,31,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding-top:.7rem;padding-bottom:.7rem;box-shadow:0 1px 0 rgba(198,189,169,.08)}
+.nav.some{transform:translateY(-110%)}
+.nav-logo img{height:30px;width:auto}
 .nav-links{display:flex;gap:2.2rem;list-style:none}
-.nav-links a{font-size:.92rem;font-weight:700;text-decoration:none;color:var(--bege);opacity:.75;transition:opacity .25s,color .25s}
+.nav-links a{font-size:.92rem;font-weight:700;text-decoration:none;color:var(--bege);position:relative;opacity:.8;transition:opacity .25s,color .25s}
+.nav-links a::after{content:'';position:absolute;left:0;right:0;bottom:-3px;height:1px;background:var(--caramelo);transform:scaleX(0);transform-origin:right;transition:transform .45s var(--suave)}
 .nav-links a:hover{opacity:1;color:var(--off)}
+.nav-links a:hover::after{transform:scaleX(1);transform-origin:left}
 
-/* botão da marca: o quadrado com a seta, igual ao do rodapé dos posts */
-.btn{display:inline-flex;align-items:center;gap:.9rem;font-family:var(--fonte);font-weight:800;font-size:.98rem;text-decoration:none;border:0;cursor:pointer;padding:.55rem .55rem .55rem 1.3rem;border-radius:14px 4px 14px 4px;transition:transform .25s,box-shadow .25s,background .25s}
-.btn .seta{display:grid;place-items:center;width:38px;height:38px;border-radius:12px 3px 12px 3px;transition:transform .25s}
+/* botão da marca */
+.btn{display:inline-flex;align-items:center;gap:.9rem;font-family:var(--fonte);font-weight:800;font-size:.98rem;text-decoration:none;border:0;cursor:pointer;padding:.55rem .55rem .55rem 1.3rem;border-radius:14px 4px 14px 4px;transition:box-shadow .25s,background .25s;will-change:transform}
+.btn .seta{display:grid;place-items:center;width:38px;height:38px;border-radius:12px 3px 12px 3px;transition:transform .35s var(--suave);overflow:hidden}
 .btn .seta svg{width:14px;height:14px}
-.btn:hover{transform:translate(-1px,-2px)}
-.btn:hover .seta{transform:translateX(3px)}
-.btn-claro{background:#e3dbcd;color:var(--preto);box-shadow:var(--sombra-peca)}
-.btn-claro .seta{background:var(--preto);color:#e3dbcd}
+.btn:hover .seta{transform:translateX(4px)}
+.btn-claro{background:var(--papel);color:var(--preto);box-shadow:var(--sombra-peca)}
+.btn-claro .seta{background:var(--preto);color:var(--papel)}
 .btn-escuro{background:var(--oliva);color:var(--off);box-shadow:6px 9px 14px rgba(30,31,31,.22),20px 30px 40px rgba(30,31,31,.14)}
-.btn-escuro .seta{background:#e3dbcd;color:var(--preto)}
+.btn-escuro .seta{background:var(--papel);color:var(--preto)}
 .btn-linha{background:transparent;color:var(--off);box-shadow:inset 0 0 0 1px rgba(198,189,169,.3);padding:.85rem 1.4rem}
 .btn-linha:hover{box-shadow:inset 0 0 0 1px var(--caramelo)}
 .nav .btn{font-size:.88rem;padding:.4rem .4rem .4rem 1.1rem}
 .nav .btn .seta{width:30px;height:30px}
 
-/* ---------- HERO ---------- */
-.hero{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8rem var(--borda) 7rem;overflow:hidden;background:var(--preto)}
-.hero .v-linhas{color:var(--bege);opacity:.22;width:150%;height:100%;left:-25%;top:12%;-webkit-mask-size:100% auto;mask-size:100% auto}
-.hero .v-estrela{color:var(--caramelo);width:clamp(46px,5vw,72px);right:9%;top:20%}
-.hero .v-estrelas{color:var(--bege);opacity:.55;width:clamp(30px,3vw,44px);left:8%;bottom:20%}
-.hero-rotulo{display:inline-block;font-size:.85rem;font-weight:700;color:var(--bege);padding:.3rem .9rem;border-radius:999px;background:rgba(56,52,46,.7);box-shadow:inset 0 0 0 1px rgba(198,189,169,.14),var(--sombra-peca);margin-bottom:2.2rem}
-.hero h1{font-weight:400;line-height:1.02;text-shadow:var(--sombra-texto)}
-.hero h1 .linha{display:block;font-size:clamp(1.25rem,2.6vw,2.1rem);color:var(--off);margin-bottom:.4rem}
-.hero h1 .grande{display:block;font-weight:800;font-size:clamp(3.2rem,10.5vw,9rem);letter-spacing:-.045em;color:var(--off)}
-.hero h1 .grande em{font-weight:900;color:transparent;background:linear-gradient(100deg,#e6d3b6 0%,var(--caramelo) 55%,#8a7258 100%);-webkit-background-clip:text;background-clip:text;text-shadow:none;filter:drop-shadow(5px 7px 10px rgba(0,0,0,.4)) drop-shadow(14px 20px 30px rgba(0,0,0,.22));padding-right:.08em}
-.palavra-selo{position:relative;display:inline-block}
-.selo{position:absolute;right:-.2em;bottom:-.55em;display:inline-flex;align-items:flex-start;gap:2px;font-size:clamp(.8rem,1.3vw,1rem);font-style:normal;letter-spacing:0;text-shadow:none;filter:drop-shadow(6px 10px 9px rgba(0,0,0,.5))}
-.selo svg{width:1.15em;height:1.15em;margin-top:-.7em;transform:rotate(-8deg)}
-.selo span{background:#e3dbcd;color:var(--oliva);font-weight:800;padding:.18rem .6rem;border-radius:6px}
-.hero-texto{max-width:36rem;margin:3.2rem auto 2.4rem;color:var(--bege);font-size:1.08rem;text-shadow:0 2px 8px rgba(0,0,0,.4)}
-.hero-texto b{color:var(--off)}
-.hero-botoes{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center}
-.hero-rodape{position:absolute;left:var(--borda);right:var(--borda);bottom:1.8rem;display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:var(--bege);opacity:.7}
-.hero-rodape .quad{width:30px;height:30px;display:grid;place-items:center;background:#e3dbcd;color:var(--preto);border-radius:10px 3px 10px 3px;box-shadow:var(--sombra-peca);animation:desce 2.2s ease-in-out infinite}
-.hero-rodape .quad svg{width:11px;transform:rotate(90deg)}
-@keyframes desce{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+/* texto que sobe por máscara */
+.mascara{display:block;overflow:hidden;padding-bottom:.08em;margin-bottom:-.08em}
+.mascara > span{display:block;transform:translateY(105%);transition:transform 1.2s var(--suave)}
+.pronto .mascara > span{transform:none}
+.palavras .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.1em;margin-bottom:-.1em}
+.palavras .w > span{display:inline-block;transform:translateY(105%);transition:transform 1s var(--suave);transition-delay:calc(var(--i) * 45ms)}
+.palavras.ok .w > span{transform:none}
 
-/* ---------- FAIXA DE PALAVRAS ---------- */
+/* número da seção, igual ao "2" da referência */
+.num{display:flex;align-items:center;gap:.9rem;font-size:.85rem;font-weight:800;letter-spacing:.02em;margin-bottom:1.6rem}
+.num b{font-style:italic;font-weight:900;font-size:1rem}
+.num::after{content:'';width:3.5rem;height:1px;background:currentColor;opacity:.4}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;min-height:100svh;padding:8.5rem var(--borda) 2.2rem;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;isolation:isolate}
+.hero::before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(1100px 900px at -160px -160px,rgba(244,242,238,.15),rgba(244,242,238,.05) 35%,transparent 70%)}
+.hero .v-linhas{color:var(--bege);opacity:.18;width:150%;height:100%;left:-25%;top:14%;-webkit-mask-size:100% auto;mask-size:100% auto;z-index:-1}
+.hero .num{color:var(--bege)}
+.hero h1{font-weight:400;line-height:.92;text-shadow:var(--sombra-texto);position:relative;z-index:2}
+.hero h1 .linha{font-size:clamp(1.15rem,2.3vw,1.9rem);color:var(--bege);line-height:1.3;margin-bottom:.6rem}
+.hero h1 .grande{font-weight:800;font-size:clamp(3.4rem,11vw,10.5rem);letter-spacing:-.05em;color:var(--off)}
+.hero h1 .recuo{padding-left:.9em}
+.hero h1 em{font-weight:900;color:transparent;background:linear-gradient(100deg,#e6d3b6 0%,var(--caramelo) 55%,#8a7258 100%);-webkit-background-clip:text;background-clip:text;text-shadow:none;filter:drop-shadow(5px 7px 10px rgba(0,0,0,.4));padding-right:.08em;white-space:nowrap}
+.palavra-selo{position:relative;display:inline-block}
+.selo{position:absolute;right:-.1em;bottom:-.45em;display:inline-flex;align-items:flex-start;gap:2px;font-size:clamp(.8rem,1.3vw,1rem);font-style:normal;letter-spacing:0;text-shadow:none;filter:drop-shadow(6px 10px 9px rgba(0,0,0,.5));opacity:0;transform:translate(14px,14px);transition:opacity .6s 1.1s,transform .8s var(--suave) 1.1s}
+.pronto .selo{opacity:1;transform:none}
+.selo svg{width:1.15em;height:1.15em;margin-top:-.7em;transform:rotate(-8deg)}
+.selo span{background:var(--papel);color:var(--oliva);font-weight:800;padding:.18rem .6rem;border-radius:6px;line-height:1.5}
+
+/* capas flutuando no hero */
+.flutua{position:absolute;z-index:1;border-radius:10px;overflow:hidden;box-shadow:var(--sombra-peca);will-change:transform;opacity:0;transition:opacity 1.2s ease}
+.pronto .flutua{opacity:1}
+.flutua img{width:100%;aspect-ratio:4/5;object-fit:cover}
+.f1{width:clamp(150px,16vw,260px);right:7vw;top:15vh;rotate:5deg;transition-delay:.5s}
+.f2{width:clamp(120px,12vw,200px);right:21vw;top:50vh;rotate:-6deg;transition-delay:.7s}
+.f3{width:clamp(100px,10vw,170px);right:4vw;top:60vh;rotate:-2deg;transition-delay:.9s}
+.etiqueta{position:absolute;z-index:3;font-size:.8rem;font-weight:800;background:var(--papel);color:var(--preto);padding:.35rem .8rem;border-radius:10px 3px 10px 3px;box-shadow:var(--sombra-peca);white-space:nowrap;animation:boia 5s ease-in-out infinite;opacity:0;transition:opacity .8s 1.3s}
+.pronto .etiqueta{opacity:1}
+.etiqueta::before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--caramelo);margin-right:.5rem;vertical-align:1px}
+.e1{right:calc(7vw + clamp(150px,16vw,260px) - 30px);top:calc(15vh + 40px)}
+.e2{right:calc(21vw - 40px);top:calc(50vh + clamp(120px,12vw,200px) * 1.2);animation-delay:-2s}
+@keyframes boia{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+.hero-base{display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;margin-top:3rem;position:relative;z-index:2}
+.hero-texto{max-width:30rem;color:var(--bege);font-size:1.05rem}
+.hero-texto b{color:var(--off)}
+.hero-botoes{display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.6rem}
+.aparece-hero{opacity:0;transform:translateY(20px);transition:opacity 1s .9s,transform 1.2s var(--suave) .9s}
+.pronto .aparece-hero{opacity:1;transform:none}
+.roda{position:relative;width:118px;height:118px;flex:none;display:grid;place-items:center;text-decoration:none}
+.roda svg.texto{position:absolute;inset:0;width:100%;height:100%;animation:gira 16s linear infinite;color:var(--bege)}
+.roda .meio{width:42px;height:42px;border-radius:12px 3px 12px 3px;background:var(--papel);color:var(--preto);display:grid;place-items:center;box-shadow:var(--sombra-peca)}
+.roda .meio svg{width:12px;height:12px;transform:rotate(90deg)}
+
+/* ---------- FAIXA ---------- */
 .faixa{background:var(--oliva);overflow:hidden;padding:1.1rem 0;box-shadow:inset 0 1px 0 rgba(198,189,169,.08),inset 0 -1px 0 rgba(0,0,0,.25)}
-.faixa-trilho{display:flex;width:max-content;animation:corre 40s linear infinite}
-.faixa span{font-weight:800;font-style:italic;font-size:1.35rem;color:var(--bege);padding:0 1.6rem;white-space:nowrap;display:flex;align-items:center;gap:3.2rem;opacity:.8}
-.faixa span::after{content:'';width:12px;height:16px;background:var(--caramelo);-webkit-mask:url(img/estrela.png) center/contain no-repeat;mask:url(img/estrela.png) center/contain no-repeat}
-@keyframes corre{to{transform:translateX(-50%)}}
+.faixa-trilho{display:flex;width:max-content;will-change:transform}
+.faixa span{font-weight:800;font-style:italic;font-size:clamp(1.3rem,2.4vw,2rem);color:var(--bege);padding:0 1.6rem;white-space:nowrap;display:flex;align-items:center;gap:3.2rem;opacity:.85}
+.faixa span::after{content:'';width:14px;height:19px;background:var(--caramelo);-webkit-mask:url(img/estrela.png) center/contain no-repeat;mask:url(img/estrela.png) center/contain no-repeat}
 
 /* ---------- SEÇÕES ---------- */
-section{position:relative;overflow:hidden;padding:8rem var(--borda)}
-.rotulo{display:inline-block;font-size:.85rem;font-weight:800;padding:.25rem .8rem;border-radius:999px;margin-bottom:1.4rem}
-.titulo{font-weight:400;font-size:clamp(2rem,4.6vw,3.6rem);line-height:1.08;letter-spacing:-.025em;max-width:22ch}
-.titulo b,.titulo em{letter-spacing:-.035em}
-.centro{text-align:center;margin-left:auto;margin-right:auto}
+section{position:relative;overflow:hidden;padding:9rem var(--borda)}
+.titulo{font-weight:400;font-size:clamp(2.1rem,5vw,4.2rem);line-height:1.04;letter-spacing:-.03em;max-width:20ch}
+.titulo em{letter-spacing:-.035em;white-space:nowrap}
+.aparece{opacity:0;transform:translateY(40px);transition:opacity 1s ease,transform 1.2s var(--suave)}
+.aparece.ok{opacity:1;transform:none}
 
-/* dor (bege, montanhas escuras grandes) */
+/* 01 o motivo (bege) */
 .dor{background:var(--bege);color:var(--preto)}
-.dor .v-montanha{color:var(--preto);opacity:.55;width:max(104%,1100px);left:50%;transform:translateX(-50%);top:2%}
-.dor .rotulo{background:var(--oliva);color:#e3dbcd}
-.dor .titulo{text-shadow:var(--sombra-texto-claro)}
+.dor .v-montanha{color:var(--preto);opacity:.5;width:max(104%,1100px);left:50%;translate:-50% 0;top:2%}
+.dor .num{color:var(--oliva)}
 .dor .titulo em{color:var(--oliva)}
-.dor-frase{max-width:34rem;margin:1.6rem auto 4rem;font-size:1.1rem;color:var(--oliva)}
-.antes-depois{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;max-width:1100px;margin:0 auto}
-.ad{background:var(--off);border-radius:20px 6px 20px 6px;padding:1.8rem 1.6rem;text-align:left;box-shadow:inset 1px 1px 0 rgba(255,255,255,.8),8px 12px 18px rgba(30,31,31,.12),26px 36px 60px rgba(30,31,31,.12)}
+.dor-topo{display:grid;grid-template-columns:1.4fr 1fr;gap:4rem;align-items:end}
+.dor-frase{font-size:1.12rem;color:var(--oliva);max-width:26rem}
+.antes-depois{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:5rem;perspective:1200px}
+.ad{background:var(--off);border-radius:20px 6px 20px 6px;padding:2rem 1.7rem;box-shadow:inset 1px 1px 0 rgba(255,255,255,.8),8px 12px 18px rgba(30,31,31,.12),26px 36px 60px rgba(30,31,31,.12);transform-style:preserve-3d;transition:opacity 1s ease,transform 1.2s var(--suave)}
 .ad .antes{display:flex;gap:.6rem;align-items:center;color:#7d756a;font-size:.95rem;text-decoration:line-through;text-decoration-color:rgba(163,38,42,.55);text-decoration-thickness:2px}
-.ad .antes::before{content:'✕';text-decoration:none;display:inline-grid;place-items:center;width:22px;height:22px;flex:none;border-radius:6px;background:rgba(56,52,46,.1);font-size:.7rem;color:var(--oliva)}
-.ad .depois{margin-top:.9rem;font-weight:800;font-size:1.25rem;line-height:1.25;color:var(--preto)}
-.ad .depois em{color:#8a7258}
+.ad .antes::before{content:'✕';display:inline-grid;place-items:center;width:22px;height:22px;flex:none;border-radius:6px;background:rgba(56,52,46,.1);font-size:.7rem;color:var(--oliva)}
+.ad .depois{margin-top:.9rem;font-weight:800;font-size:1.3rem;line-height:1.22}
+.ad .depois em{color:#8a7258;white-space:nowrap}
 .ad p{margin-top:.7rem;font-size:.95rem;color:var(--oliva)}
 
-/* trabalhos (escuro) */
-.trabalhos{background:var(--preto)}
-.trabalhos .v-linhas{color:var(--caramelo);opacity:.16;width:140%;height:900px;left:-20%;top:28%;-webkit-mask-size:100% auto;mask-size:100% auto}
-.trabalhos .rotulo{background:#e3dbcd;color:var(--preto)}
-.trabalhos .titulo{text-shadow:var(--sombra-texto)}
-.trabalhos .titulo em{color:var(--caramelo)}
-.trab-topo{display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;margin-bottom:3.5rem;flex-wrap:wrap}
-.trab-topo p{max-width:24rem;color:var(--bege)}
-.grade{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem}
-.grade figure{position:relative;border-radius:10px;overflow:hidden;box-shadow:var(--sombra-peca);transition:transform .45s cubic-bezier(.2,.7,.2,1),box-shadow .45s}
-.grade figure img{width:100%;aspect-ratio:4/5;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
-.grade figure:hover{transform:translate(-3px,-6px);box-shadow:10px 16px 22px rgba(0,0,0,.35),34px 48px 70px rgba(0,0,0,.3)}
-.grade figure:hover img{transform:scale(1.03)}
-.grade figure.alto{grid-row:span 2}
-.grade figure.alto img{height:100%;aspect-ratio:auto}
-.grade figure.cta{display:flex;flex-direction:column;justify-content:space-between;padding:1.6rem;background:var(--oliva);box-shadow:inset 1px 1px 0 rgba(198,189,169,.12),var(--sombra-peca)}
-.grade figure.cta p{font-size:1.35rem;line-height:1.2;color:var(--off)}
-.grade figure.cta p em{color:var(--caramelo)}
-.grade figure.cta a{font-weight:800;color:#e3dbcd;text-decoration:none;display:flex;align-items:center;gap:.6rem}
-.grade figure.cta a:hover{color:var(--off)}
+/* 02 vitrine: a janela que cresce até a tela inteira */
+.vitrine{padding:0;height:330vh;background:var(--preto);overflow:visible}
+.palco{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.palco .v-linhas{color:var(--caramelo);opacity:.14;width:150%;height:100%;left:-25%;top:20%;-webkit-mask-size:100% auto;mask-size:100% auto}
+.vit-topo{position:absolute;left:var(--borda);right:var(--borda);top:6.5rem;display:flex;justify-content:space-between;align-items:flex-start;gap:2rem;z-index:3;will-change:opacity,transform}
+.vit-topo .num{color:var(--bege);margin:0}
+.vit-topo p{max-width:22rem;color:var(--bege);font-size:.95rem;text-align:right}
+.janela{position:absolute;inset:0;z-index:2;clip-path:inset(var(--t,24%) var(--l,30%) var(--b,14%) var(--l,30%) round var(--r,22px));will-change:clip-path}
+.mosaico{position:absolute;inset:-4%;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-content:center;transform:scale(var(--z,1.5));will-change:transform}
+.mosaico img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:6px}
+.janela::after{content:'';position:absolute;inset:0;background:rgba(20,20,20,var(--veu,0));pointer-events:none}
+.vit-final{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 var(--borda);opacity:var(--fim,0);pointer-events:none}
+.vit-final .titulo{text-shadow:var(--sombra-texto);max-width:16ch;transform:translateY(calc((1 - var(--fim,0)) * 40px))}
+.vit-final .titulo em{color:var(--caramelo)}
+.vit-final p{color:var(--off);max-width:28rem;margin-top:1.2rem;text-shadow:0 2px 10px rgba(0,0,0,.6)}
+.vit-final a{pointer-events:auto;margin-top:2rem}
+.tag{position:absolute;z-index:3;font-size:.85rem;font-weight:800;background:var(--papel);color:var(--preto);padding:.45rem .95rem;border-radius:12px 3px 12px 3px;box-shadow:var(--sombra-peca);white-space:nowrap;will-change:transform,opacity}
+.tag::before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--caramelo);margin-right:.5rem;vertical-align:1px}
+.tag.escura{background:var(--oliva);color:var(--off)}
 
-.carrossel-bloco{margin-top:6rem}
-.carrossel-bloco h3{font-weight:400;font-size:clamp(1.4rem,2.6vw,2rem);text-shadow:var(--sombra-texto)}
-.carrossel-bloco h3 em{color:var(--caramelo)}
-.carrossel-bloco > p{color:var(--bege);margin-top:.4rem}
-.trilho{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory;margin-top:2rem;padding-bottom:1.2rem;scrollbar-width:thin;scrollbar-color:var(--caramelo) transparent;border-radius:10px}
-.trilho img{width:min(300px,72vw);flex:none;scroll-snap-align:start;aspect-ratio:4/5}
-.trilho-dica{display:flex;align-items:center;gap:.6rem;font-size:.85rem;color:var(--bege);opacity:.7;margin-top:.4rem}
+/* 03 carrossel na horizontal */
+.horiz{padding:0;background:var(--oliva);overflow:visible}
+.h-palco{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:flex;align-items:center}
+.h-trilho{display:flex;align-items:center;gap:2.2rem;padding:0 var(--borda);will-change:transform}
+.h-intro{flex:none;width:min(30rem,80vw);padding-right:2rem}
+.h-intro .num{color:var(--bege)}
+.h-intro .titulo{font-size:clamp(2rem,4vw,3.4rem);text-shadow:var(--sombra-texto)}
+.h-intro .titulo em{color:var(--caramelo)}
+.h-intro p{color:var(--bege);margin-top:1rem}
+.slide{flex:none;height:min(64vh,560px);aspect-ratio:4/5;border-radius:10px;overflow:hidden;box-shadow:var(--sombra-peca);position:relative}
+.slide img{width:100%;height:100%;object-fit:cover}
+.slide .n{position:absolute;left:.8rem;top:.7rem;font-size:.75rem;font-weight:900;font-style:italic;background:rgba(30,31,31,.75);color:var(--papel);padding:.15rem .55rem;border-radius:6px}
+.h-fim{flex:none;width:min(24rem,78vw);height:min(64vh,560px);border-radius:20px 6px 20px 6px;background:var(--preto);padding:2.2rem;display:flex;flex-direction:column;justify-content:space-between;box-shadow:inset 1px 1px 0 rgba(198,189,169,.12),var(--sombra-peca);position:relative;overflow:hidden}
+.h-fim p{font-size:clamp(1.4rem,2.2vw,1.9rem);line-height:1.15}
+.h-fim p em{color:var(--caramelo)}
+.h-fim .v-estrela{color:var(--caramelo);width:52px;right:2rem;top:2rem}
+.h-barra{position:absolute;left:var(--borda);right:var(--borda);bottom:2.2rem;display:flex;align-items:center;gap:1rem;color:var(--bege);font-size:.85rem;font-weight:800}
+.h-barra .linha{flex:1;height:1px;background:rgba(198,189,169,.2)}
+.h-barra .linha i{display:block;height:100%;background:var(--caramelo);transform-origin:left;transform:scaleX(var(--p,0))}
 
-/* serviços (off-white) */
+/* 04 serviços (off-white) */
 .servicos{background:var(--off);color:var(--preto)}
-.servicos .v-linhas{color:var(--oliva);opacity:.14;width:150%;height:900px;left:-30%;top:20%;-webkit-mask-size:100% auto;mask-size:100% auto}
-.servicos .v-estrela{color:var(--oliva);width:56px;right:8%;top:12%}
-.servicos .rotulo{background:var(--oliva);color:#e3dbcd}
-.servicos .titulo{text-shadow:var(--sombra-texto-claro)}
+.servicos .v-linhas{color:var(--oliva);opacity:.12;width:150%;height:900px;left:-30%;top:25%;-webkit-mask-size:100% auto;mask-size:100% auto}
+.servicos .v-estrela{color:var(--oliva);width:56px;right:8%;top:10%}
+.servicos .num{color:var(--oliva)}
 .servicos .titulo em{color:#8a7258}
-.lista-serv{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4rem;margin-top:3.5rem}
-.serv{position:relative;background:#fff;border-radius:20px 6px 20px 6px;padding:2.2rem 2rem 2rem;box-shadow:inset 1px 1px 0 #fff,8px 12px 18px rgba(30,31,31,.08),26px 36px 60px rgba(30,31,31,.1);transition:transform .35s}
-.serv:hover{transform:translate(-2px,-4px)}
-.serv .n{font-weight:900;font-style:italic;font-size:.95rem;color:var(--caramelo)}
-.serv h3{font-weight:800;font-size:1.55rem;letter-spacing:-.02em;margin:.2rem 0 .6rem}
+.lista-serv{margin-top:4.5rem;list-style:none}
+.serv{position:relative;display:grid;grid-template-columns:5rem 1fr 1.1fr 3rem;gap:2rem;align-items:center;padding:2.2rem 0;cursor:default}
+.serv::before,.serv:last-child::after{content:'';position:absolute;left:0;right:0;height:1px;background:rgba(56,52,46,.22);transform:scaleX(0);transform-origin:left;transition:transform 1.4s var(--suave)}
+.serv::before{top:0}
+.serv:last-child::after{bottom:0}
+.serv.ok::before,.serv.ok::after{transform:scaleX(1)}
+.serv .n{font-weight:900;font-style:italic;color:var(--caramelo)}
+.serv h3{font-weight:800;font-size:clamp(1.7rem,3.6vw,3rem);letter-spacing:-.035em;line-height:1;transition:transform .6s var(--suave),color .3s}
 .serv p{color:var(--oliva);font-size:1rem}
-.serv-nota{margin-top:2.4rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;color:var(--oliva)}
+.serv .ir{width:44px;height:44px;border-radius:12px 3px 12px 3px;background:var(--oliva);color:var(--papel);display:grid;place-items:center;transition:transform .5s var(--suave),background .3s}
+.serv .ir svg{width:12px;height:12px}
+.serv:hover h3{transform:translateX(14px);color:#8a7258}
+.serv:hover .ir{transform:rotate(-45deg);background:var(--caramelo)}
+.serv-nota{margin-top:3rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;color:var(--oliva)}
+.previa{position:fixed;left:0;top:0;z-index:90;width:220px;pointer-events:none;border-radius:10px;overflow:hidden;box-shadow:var(--sombra-peca);opacity:0;scale:.6;transition:opacity .35s,scale .5s var(--suave);will-change:transform}
+.previa.on{opacity:1;scale:1}
+.previa img{width:100%;aspect-ratio:4/5;object-fit:cover}
 
-/* como funciona (caramelo) */
+/* 05 como funciona (caramelo) */
 .passos{background:var(--caramelo);color:var(--preto)}
-.passos .v-montanha{color:var(--preto);opacity:.45;width:max(104%,1100px);left:50%;transform:translateX(-50%) scaleX(-1);top:4%}
-.passos .rotulo{background:var(--preto);color:#e3dbcd}
-.passos .titulo{text-shadow:var(--sombra-texto-claro)}
+.passos .v-montanha{color:var(--preto);opacity:.4;width:max(104%,1100px);left:50%;translate:-50% 0;scale:-1 1;top:4%}
+.passos .num{color:var(--preto)}
 .passos .titulo em{color:var(--off)}
-.lista-passos{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:3.5rem;counter-reset:p}
-.passo{background:rgba(30,31,31,.9);color:var(--off);border-radius:20px 6px 20px 6px;padding:2rem;box-shadow:inset 1px 1px 0 rgba(238,232,231,.1),var(--sombra-peca)}
-.passo::before{counter-increment:p;content:counter(p);display:grid;place-items:center;width:42px;height:42px;border-radius:12px 3px 12px 3px;background:#e3dbcd;color:var(--preto);font-weight:900;font-style:italic;margin-bottom:1.2rem;box-shadow:4px 6px 10px rgba(0,0,0,.35)}
+.lista-passos{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:5rem}
+.trilha{position:absolute;left:21px;right:calc(33.33% - 21px);top:21px;height:2px;background:rgba(30,31,31,.18);z-index:0}
+.trilha i{display:block;height:100%;background:var(--preto);transform-origin:left;transform:scaleX(var(--p,0))}
+.passo{position:relative;z-index:1}
+.passo .bola{display:grid;place-items:center;width:42px;height:42px;border-radius:12px 3px 12px 3px;background:rgba(30,31,31,.2);color:var(--preto);font-weight:900;font-style:italic;margin-bottom:1.6rem;transition:background .5s,color .5s,transform .6s var(--suave)}
+.passo.aceso .bola{background:var(--preto);color:var(--papel);transform:scale(1.1)}
+.passo .caixa{background:rgba(30,31,31,.92);color:var(--off);border-radius:20px 6px 20px 6px;padding:2rem;box-shadow:inset 1px 1px 0 rgba(238,232,231,.1),var(--sombra-peca)}
 .passo h3{font-weight:800;font-size:1.3rem;line-height:1.2;margin-bottom:.5rem}
 .passo p{color:var(--bege);font-size:.98rem}
 
-/* feedbacks (oliva) */
-.prova{background:var(--oliva)}
+/* 06 feedbacks (oliva) */
+.prova{background:var(--oliva);text-align:center}
+.prova .num{color:var(--bege);justify-content:center}
+.prova .num::before{content:'';width:3.5rem;height:1px;background:currentColor;opacity:.4}
 .prova .v-estrelas{color:var(--caramelo);width:48px;left:9%;top:14%}
-.prova .rotulo{background:#e3dbcd;color:var(--preto)}
-.prova .titulo{text-shadow:var(--sombra-texto)}
+.prova .titulo{text-shadow:var(--sombra-texto);margin:0 auto}
 .prova .titulo em{color:var(--caramelo)}
-.prova > p.centro{color:var(--bege);max-width:30rem;margin-top:1rem}
-.prints{display:flex;gap:1.6rem;justify-content:center;align-items:flex-start;flex-wrap:wrap;margin-top:3.5rem}
-.print{background:#ece5dd;border-radius:16px 5px 16px 5px;overflow:hidden;box-shadow:var(--sombra-peca);width:min(340px,100%)}
-.print:nth-child(1){transform:rotate(-2deg)}
-.print:nth-child(2){transform:rotate(1.5deg) translateY(2rem)}
-.print:nth-child(3){transform:rotate(-1deg)}
+.prova > p{color:var(--bege);max-width:30rem;margin:1rem auto 0}
+.prints{display:flex;gap:1.6rem;justify-content:center;align-items:flex-start;flex-wrap:wrap;margin-top:4rem}
+.print{background:#ece5dd;border-radius:16px 5px 16px 5px;overflow:hidden;box-shadow:var(--sombra-peca);width:min(340px,100%);will-change:transform}
 .print img{width:100%}
 
-/* contato (escuro) */
+/* 07 contato */
 .contato{background:var(--preto);display:grid;grid-template-columns:1.1fr 1fr;gap:5rem;align-items:center}
-.contato .v-linhas{color:var(--bege);opacity:.16;width:150%;height:900px;left:-25%;top:30%;-webkit-mask-size:100% auto;mask-size:100% auto}
-.contato .v-estrela{color:var(--caramelo);width:44px;right:5%;top:2.2rem}
-/* a palavra em destaque nunca quebra */
-.titulo em,.ad .depois em,.hero h1 em{white-space:nowrap}
-.contato .rotulo{background:#e3dbcd;color:var(--preto)}
+.contato .v-linhas{color:var(--bege);opacity:.14;width:150%;height:900px;left:-25%;top:30%;-webkit-mask-size:100% auto;mask-size:100% auto}
+.contato .num{color:var(--bege)}
 .contato .titulo{text-shadow:var(--sombra-texto)}
 .contato .titulo em{color:var(--caramelo)}
 .contato-info{margin-top:2.4rem;display:flex;flex-direction:column;gap:.9rem}
@@ -218,128 +284,390 @@ section{position:relative;overflow:hidden;padding:8rem var(--borda)}
 .campo textarea{resize:vertical;min-height:100px}
 .form .btn{align-self:flex-start}
 
-/* rodapé */
-footer{background:var(--preto);border-top:1px solid rgba(198,189,169,.08);padding:2.2rem var(--borda);display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;color:var(--bege);font-size:.9rem}
-footer img{height:24px;width:auto;opacity:.85}
-footer nav{display:flex;gap:1.6rem}
-footer nav a{text-decoration:none;font-weight:700;opacity:.75}
-footer nav a:hover{opacity:1;color:var(--off)}
+/* rodapé com o logo gigante */
+footer{background:var(--preto);padding:5rem var(--borda) 2rem;border-top:1px solid rgba(198,189,169,.08);overflow:hidden}
+.rod-logo{width:100%;clip-path:inset(0 0 100% 0);transition:clip-path 1.6s var(--suave)}
+.rod-logo.ok{clip-path:inset(-10% -2% -10% -2%)}
+.rod-logo img{width:100%;height:auto;opacity:.9}
+.rod-base{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;color:var(--bege);font-size:.9rem;margin-top:2.4rem}
+.rod-base nav{display:flex;gap:1.6rem}
+.rod-base nav a{text-decoration:none;font-weight:700;opacity:.75}
+.rod-base nav a:hover{opacity:1;color:var(--off)}
 
-/* botão fixo do WhatsApp (celular) */
-.zap{position:fixed;right:1rem;bottom:1rem;z-index:150;display:none;align-items:center;gap:.6rem;background:#e3dbcd;color:var(--preto);font-weight:800;text-decoration:none;padding:.7rem 1.1rem .7rem .8rem;border-radius:14px 4px 14px 4px;box-shadow:6px 9px 14px rgba(0,0,0,.4),20px 30px 40px rgba(0,0,0,.25)}
+/* WhatsApp fixo (celular) */
+.zap{position:fixed;right:1rem;bottom:1rem;z-index:150;display:none;align-items:center;gap:.6rem;background:var(--papel);color:var(--preto);font-weight:800;text-decoration:none;padding:.7rem 1.1rem .7rem .8rem;border-radius:14px 4px 14px 4px;box-shadow:6px 9px 14px rgba(0,0,0,.4),20px 30px 40px rgba(0,0,0,.25)}
 .zap svg{width:22px;height:22px}
+.zap{opacity:0;transform:translateY(20px);pointer-events:none;transition:opacity .4s,transform .5s var(--suave)}
+.zap.on{opacity:1;transform:none;pointer-events:auto}
 
-/* entrada suave */
-.aparece{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
-.aparece.ok{opacity:1;transform:none}
+/* ---------- ANIMAÇÕES EXTRAS ---------- */
+/* barra fina no topo mostrando quanto já rolou */
+.progresso{position:fixed;left:0;top:0;width:100%;height:2px;z-index:120;background:linear-gradient(90deg,#8a7258,var(--caramelo),#e6d3b6);transform-origin:left;transform:scaleX(0);pointer-events:none}
+
+/* botões: a cor sobe por dentro ao passar o mouse */
+.btn{position:relative;overflow:hidden;isolation:isolate}
+.btn::before{content:'';position:absolute;inset:0;z-index:-1;background:var(--caramelo);transform:translateY(102%);border-radius:inherit;transition:transform .6s var(--suave)}
+.btn:hover::before{transform:none}
+.btn-escuro:hover{color:var(--preto)}
+.btn-linha::before{background:rgba(173,145,113,.2)}
+
+/* palavra em destaque ganha um traço que se desenha embaixo */
+.palavras em{position:relative;display:inline-block}
+.palavras em::after{content:'';position:absolute;left:0;right:.1em;bottom:.04em;height:.055em;border-radius:2px;background:currentColor;opacity:.45;transform:scaleX(0);transform-origin:left;transition:transform 1.3s var(--suave) .55s}
+.palavras.ok em::after{transform:scaleX(1)}
+
+/* número da seção: o tracinho cresce */
+.num::after{transform-origin:left;transition:transform 1.2s var(--suave) .3s}
+.num.aparece::after{transform:scaleX(0)}
+.num.aparece.ok::after{transform:scaleX(1)}
+
+/* "passa": as letras pulam em onda ao passar o mouse */
+.letras{display:inline-block}
+.letras span{display:inline-block;transition:transform .7s var(--suave);transition-delay:calc(var(--i) * 40ms)}
+.letras:hover span{transform:translateY(-.09em) rotate(-4deg)}
+.estrela-hero{color:var(--caramelo);width:clamp(40px,4vw,64px);left:46%;top:18%;opacity:.9}
+
+/* segunda faixa, menor, correndo ao contrário */
+.faixa:has(.contra:only-child){padding:.95rem 0}
+.faixa-trilho.contra span{font-size:clamp(.95rem,1.5vw,1.2rem);font-style:normal;color:var(--caramelo);opacity:.7}
+
+/* cartões do motivo chegam de lados diferentes */
+.ad.aparece:nth-child(1){transform:translate(-50px,50px) rotate(-4deg)}
+.ad.aparece:nth-child(2){transform:translateY(80px) scale(.94)}
+.ad.aparece:nth-child(3){transform:translate(50px,50px) rotate(4deg)}
+.ad.aparece.ok:nth-child(n){transform:none}
+
+/* mosaico: cada capa clareia ao passar o mouse */
+.mosaico img{transition:filter .5s}
+.mosaico:hover img{filter:brightness(.7) saturate(.8)}
+.mosaico img:hover{filter:none}
+
+/* carrossel horizontal em 3D */
+.h-trilho{perspective:1400px}
+.slide,.h-fim{will-change:transform,opacity}
+
+/* serviços: a linha de cada um se desenha e o número gira */
+.serv .n{display:inline-block;transition:transform .6s var(--suave)}
+.serv:hover .n{transform:rotate(-12deg) scale(1.3)}
+
+/* passos chegam tombando para frente */
+.passo.aparece{transform:perspective(900px) rotateX(32deg) translateY(80px);transform-origin:50% 100%}
+.passo.aparece.ok{transform:none}
+.passo .caixa{transition:transform .5s var(--suave)}
+.passo:hover .caixa{transform:translateY(-8px)}
+
+/* prints: abrem como uma cortina e ficam boiando */
+.revela{clip-path:inset(100% 0 0 0 round 16px 5px 16px 5px);transition:clip-path 1.5s var(--suave)}
+.revela img{scale:1.35;transition:scale 2s var(--suave)}
+.revela.ok{clip-path:inset(0 0 0 0 round 16px 5px 16px 5px)}
+.revela.ok img{scale:1}
+.print:nth-child(2){transition-delay:.15s}
+.print:nth-child(3){transition-delay:.3s}
+.print{animation:boia2 6s ease-in-out infinite}
+.print:nth-child(2){animation-delay:-2s}
+.print:nth-child(3){animation-delay:-4s}
+@keyframes boia2{0%,100%{translate:0 0}50%{translate:0 -12px}}
+
+/* formulário: os campos entram um depois do outro */
+.form .campo,.form .btn{opacity:0;transform:translateY(24px);transition:opacity .8s,transform 1s var(--suave)}
+.form.ok .campo,.form.ok .btn{opacity:1;transform:none}
+.form .campo:nth-of-type(1){transition-delay:.15s}
+.form .campo:nth-of-type(2){transition-delay:.25s}
+.form .campo:nth-of-type(3){transition-delay:.35s}
+.form .campo:nth-of-type(4){transition-delay:.45s}
+.form.ok .btn{transition-delay:.55s,.55s}
+.campo label{transition:color .3s,transform .4s var(--suave)}
+.campo:focus-within label{color:var(--caramelo);transform:translateX(6px)}
+
+/* contato: ícones balançam ao passar o mouse */
+.contato-info a svg{transition:transform .5s var(--suave)}
+.contato-info a:hover svg{transform:rotate(-12deg) scale(1.2)}
+
+/* =====================================================================
+   TEMA ESCURO COM LUZ (referência: pin de site escuro com holofote e
+   símbolos flutuando, pedido de Shaul em 16/11: "no site inteiro")
+   ===================================================================== */
+:root{--fundo:#171818;--fundo2:#1c1b19;--vidro:rgba(56,52,46,.38);--vidro-borda:rgba(198,189,169,.13)}
+body{background:var(--fundo)}
+
+/* todas as seções ficam escuras, cada uma com um holofote caramelo e uma grade de pontinhos */
+main > section,.h-palco,.palco{isolation:isolate}
+.dor,.servicos,.passos,.prova,.contato,.horiz,.vitrine,.hero{background:var(--fundo);color:var(--off)}
+.servicos,.prova{background:var(--fundo2)}
+.luzes::before{content:'';position:absolute;inset:0;z-index:-2;pointer-events:none;
+  background:radial-gradient(60% 55% at var(--gx,50%) var(--gy,0%),rgba(173,145,113,.26),rgba(173,145,113,.08) 45%,transparent 75%)}
+.luzes::after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.55;
+  background-image:radial-gradient(rgba(198,189,169,.16) 1px,transparent 1.2px);background-size:30px 30px;
+  -webkit-mask-image:radial-gradient(70% 60% at var(--gx,50%) var(--gy,0%),#000,transparent 80%);mask-image:radial-gradient(70% 60% at var(--gx,50%) var(--gy,0%),#000,transparent 80%)}
+
+/* palavra em destaque: degradê caramelo que brilha */
+.titulo em,.ad .depois em,.h-fim p em,.form h3 em{color:transparent!important;background:linear-gradient(100deg,#f0dfc4 0%,var(--caramelo) 50%,#8a7258 100%);-webkit-background-clip:text;background-clip:text;filter:none;padding-right:.06em}
+.palavras em::after{background:var(--caramelo)}
+.titulo{text-shadow:none}
+.num{color:var(--bege)!important}
+.num b{color:var(--caramelo)}
+
+/* vidro: cartões translúcidos com borda fina */
+.vidro,.ad,.passo .caixa,.form,.h-fim,.serv .ir,.passo .bola{background:var(--vidro)!important;border:1px solid var(--vidro-borda);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:inset 0 1px 0 rgba(238,232,231,.06),0 20px 50px rgba(0,0,0,.35)!important}
+
+/* ---- topo centralizado, com o holofote atrás do título ---- */
+.hero{justify-content:center;align-items:center;text-align:center;padding:8rem var(--borda) 6rem}
+.hero::before{background:none}
+.hero .v-linhas{opacity:.1}
+.hero .holofote{position:absolute;left:50%;top:44%;width:min(1100px,120vw);aspect-ratio:1.6;translate:-50% -50%;z-index:-1;pointer-events:none;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(198,170,130,.34),rgba(173,145,113,.14) 45%,transparent 100%);filter:blur(10px);will-change:transform}
+.hero .centro-hero{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center}
+.pilula{display:inline-flex;align-items:center;gap:.6rem;font-size:.85rem;font-weight:700;color:var(--bege);padding:.4rem .5rem .4rem .9rem;border-radius:999px;background:var(--vidro);border:1px solid var(--vidro-borda);backdrop-filter:blur(10px);margin-bottom:2.2rem}
+.pilula i{width:8px;height:8px;border-radius:50%;background:var(--caramelo);box-shadow:0 0 0 0 rgba(173,145,113,.6);animation:pulsa 2s infinite}
+.pilula b{background:var(--papel);color:var(--preto);font-size:.75rem;padding:.15rem .6rem;border-radius:999px}
+@keyframes pulsa{0%{box-shadow:0 0 0 0 rgba(173,145,113,.6)}80%,100%{box-shadow:0 0 0 10px rgba(173,145,113,0)}}
+.hero h1{text-align:center;text-shadow:none}
+.hero h1 .grande{font-size:clamp(3.2rem,9.5vw,8.6rem)}
+.hero h1 .recuo{padding-left:0}
+.hero h1 em{filter:none}
+.hero .hero-base{display:block;margin-top:0}
+.hero-texto{margin:2.4rem auto 0;max-width:34rem;text-align:center}
+@media (max-width:640px){
+  .hero{padding:7rem 1.2rem 7rem}
+  .hero-rodape{left:1rem;right:1rem;bottom:1rem;font-size:.78rem}
+  .pilula{font-size:.75rem}
+  .gigante{padding:3.5rem 0}
+}
+@media (prefers-reduced-motion:reduce){.sim > *,.pilula i,.hero-rodape .desce span{animation:none}}
+.hero-botoes{justify-content:center;margin-top:2rem}
+.hero-rodape{position:absolute;left:var(--borda);right:var(--borda);bottom:1.6rem;z-index:3;display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.7rem .8rem .7rem 1.1rem;border-radius:14px;background:var(--vidro);border:1px solid var(--vidro-borda);backdrop-filter:blur(12px);font-size:.85rem;color:var(--bege)}
+.hero-rodape a{color:var(--bege);text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;font-weight:700}
+.hero-rodape a:hover{color:var(--off)}
+.hero-rodape svg{width:16px;height:16px;color:var(--caramelo)}
+.hero-rodape .desce{display:inline-flex;align-items:center;gap:.6rem}
+.hero-rodape .desce span{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:var(--papel);color:var(--preto);animation:desce 2.2s ease-in-out infinite}
+.hero-rodape .desce span svg{width:10px;height:10px;color:var(--preto);transform:rotate(90deg)}
+@keyframes desce{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+
+/* ---- símbolos do Instagram flutuando em profundidade ---- */
+.simbolos{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.sim{position:absolute;display:grid;place-items:center;color:var(--caramelo);will-change:transform;opacity:0;transition:opacity 1.6s ease}
+.pronto .sim{opacity:var(--o,.6)}
+.sim > *{animation:flutua var(--t,9s) ease-in-out infinite;animation-delay:var(--a,0s)}
+.sim svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.sim .caixinha{position:absolute;inset:0;display:grid;place-items:center;border-radius:28%;background:var(--vidro);border:1px solid var(--vidro-borda);color:var(--bege)}
+.sim .caixinha svg{width:52%;height:52%}
+.sim .arroba{font-weight:800;font-size:calc(var(--s) * .55);color:var(--bege);line-height:1}
+@keyframes flutua{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-14px) rotate(var(--g,6deg))}}
+
+/* seções claras de antes, agora no escuro */
+.dor .v-montanha,.passos .v-montanha{color:var(--caramelo);opacity:.16}
+.dor .titulo,.dor-frase{color:var(--off)}
+.dor-frase{color:var(--bege)}
+.ad{color:var(--off)}
+.ad .antes{color:#9b9284}
+.ad .antes::before{background:rgba(198,189,169,.1);color:var(--bege)}
+.ad p{color:var(--bege)}
+.servicos .v-linhas{color:var(--caramelo);opacity:.1}
+.servicos .v-estrela{color:var(--caramelo)}
+.serv::before,.serv:last-child::after{background:rgba(198,189,169,.16)}
+.serv p,.serv-nota{color:var(--bege)}
+.serv .ir{color:var(--papel)}
+.serv:hover h3{color:var(--caramelo)}
+.serv:hover .ir{background:var(--caramelo)!important;color:var(--preto)}
+.trilha{background:rgba(198,189,169,.14)}
+.trilha i{background:linear-gradient(90deg,#8a7258,var(--caramelo),#e6d3b6);box-shadow:0 0 12px rgba(173,145,113,.6)}
+.passo .bola{color:var(--bege)}
+.passo.aceso .bola{background:var(--caramelo)!important;color:var(--preto);box-shadow:0 0 24px rgba(173,145,113,.55)!important}
+.faixa{background:rgba(23,24,24,.9);border-top:1px solid var(--vidro-borda);border-bottom:1px solid var(--vidro-borda);box-shadow:none}
+.horiz{background:var(--fundo)}
+.h-fim{background:var(--vidro)}
+.btn-escuro{background:var(--papel);color:var(--preto)}
+.btn-escuro .seta{background:var(--preto);color:var(--papel)}
+.btn-claro{box-shadow:0 0 0 1px rgba(238,232,231,.1),0 10px 30px rgba(173,145,113,.25)}
+.btn-claro:hover{box-shadow:0 0 0 1px rgba(238,232,231,.1),0 10px 40px rgba(173,145,113,.5)}
+.btn-linha{background:var(--vidro);backdrop-filter:blur(10px)}
+.form{background:var(--vidro)!important}
+.campo input,.campo select,.campo textarea{background:rgba(23,24,24,.6)}
+footer{background:var(--fundo)}
+.rod-logo img{filter:none}
+
+/* ---- palavra gigante que anda com a rolagem ---- */
+.gigante{padding:6rem 0;background:var(--fundo);overflow:hidden}
+.gigante .linha-g{display:flex;gap:4vw;width:max-content;white-space:nowrap;will-change:transform;font-weight:900;font-style:italic;letter-spacing:-.05em;line-height:.95;font-size:clamp(5rem,16vw,15rem)}
+.gigante .cheia{color:transparent;background:linear-gradient(100deg,#f0dfc4,var(--caramelo) 50%,#8a7258);-webkit-background-clip:text;background-clip:text}
+.gigante .vazada{color:transparent;-webkit-text-stroke:1.5px rgba(198,189,169,.35)}
+
+/* ---- órbitas com estrelas (ideia de Shaul, 16/11): duas elipses tortas que se cruzam,
+   com estrelas de 4 pontas dando a volta. As linhas se desenham quando aparecem. ---- */
+.orbita{position:absolute;pointer-events:none;overflow:visible}
+.orbita .trilho{fill:none;stroke:var(--bege);stroke-width:1.2;opacity:.38;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 2.6s var(--suave)}
+.orbita .trilho.b{transition-delay:.35s;opacity:.28}
+.orbita.ok .trilho,.pronto .hero .orbita .trilho{stroke-dashoffset:0}
+.orbita .astro{fill:var(--caramelo);filter:drop-shadow(0 0 6px rgba(198,170,130,.9))}
+.orbita .astro.claro{fill:var(--off)}
+.hero .orbita{left:50%;top:50%;width:min(1180px,118vw);translate:-50% -46%;z-index:-1}
+.hero .orbita .trilho{transition-delay:1s}
+.estrela-hero{display:none}
+.hero .orbita .trilho.b{transition-delay:1.3s}
+.rod-logo{position:relative;overflow:visible}
+footer{position:relative;isolation:isolate}
+footer .orbita{left:50%;top:50%;width:112%;translate:-50% -50%;z-index:-1}
+footer{padding-top:9rem}
+@media (max-width:640px){.hero .orbita{width:190vw;translate:-50% -40%}}
+@media (prefers-reduced-motion:reduce){.orbita .trilho{stroke-dashoffset:0;transition:none}}
+
+/* quem pede menos movimento vê tudo parado e aberto */
 @media (prefers-reduced-motion:reduce){
-  .aparece{opacity:1;transform:none;transition:none}
-  .faixa-trilho,.hero-rodape .quad{animation:none}
-  html{scroll-behavior:auto}
+  .abertura{display:none}
+  .grao,.gira,.roda svg.texto,.etiqueta{animation:none}
+  .mascara > span,.palavras .w > span{transform:none!important;transition:none}
+  .aparece,.aparece-hero,.flutua,.etiqueta,.selo{opacity:1!important;transform:none!important;transition:none}
+  .rod-logo{clip-path:none}
+  .revela,.revela.ok{clip-path:none}.revela img{scale:1}
+  .print{animation:none}
+  .ad.aparece:nth-child(n),.passo.aparece,.form .campo,.form .btn{opacity:1;transform:none}
+  .palavras em::after,.num.aparece::after{transform:scaleX(1)}
 }
 
 /* ---------- CELULAR ---------- */
 @media (max-width:980px){
   .nav-links{display:none}
-  .grade{grid-template-columns:repeat(2,1fr)}
+  .dor-topo{grid-template-columns:1fr;gap:1.6rem}
   .antes-depois,.lista-passos{grid-template-columns:1fr;max-width:520px}
-  .lista-passos{margin-left:auto;margin-right:auto}
-  .lista-serv{grid-template-columns:1fr}
+  .trilha{display:none}
   .contato{grid-template-columns:1fr;gap:3rem}
+  .serv{grid-template-columns:3rem 1fr 44px;gap:1rem}
+  .serv p{grid-column:2 / 4;grid-row:2}
+  .serv .ir{grid-column:3;grid-row:1}
+  .f2{display:none}
+  .e2{display:none}
 }
 @media (max-width:640px){
   body{font-size:16px}
-  section{padding:5.5rem 1.4rem}
+  section{padding:6rem 1.4rem}
   .nav{padding-left:1.2rem;padding-right:1.2rem}
   .nav .btn{display:none}
-  .hero{padding:7rem 1.2rem 6rem}
-  .hero h1 .grande{font-size:clamp(2.7rem,13vw,4rem)}
-  .hero .v-estrela{top:13%;right:6%}
-  .hero .v-estrelas{display:none}
-  .hero-rodape{left:1.2rem;right:1.2rem}
-  .hero-rodape .quad{display:none}
-  .selo{bottom:-1.25em;right:0}
+  .hero{padding:7rem 1.2rem 1.6rem}
+  .hero h1 .grande{font-size:clamp(3rem,15vw,4.6rem)}
+  .hero h1 .recuo{padding-left:0}
+  .flutua,.etiqueta,.estrela-hero{display:none}
+  .selo{bottom:-1.3em;right:0}
+  .hero-base{flex-direction:column;align-items:flex-start}
   .hero-botoes .btn-linha{display:none}
-  .grade{gap:.7rem}
-  .grade figure.alto{grid-row:span 1}
-  .grade figure.alto img{aspect-ratio:4/5}
-  .grade figure.cta p{font-size:1.1rem}
+  .roda{display:none}
+  .vit-topo{top:5.5rem;flex-direction:column;gap:.8rem}
+  .vit-topo p{text-align:left;font-size:.88rem}
+  .mosaico{grid-template-columns:repeat(2,1fr)}
+  .mosaico img:nth-child(n+7){display:none}
+  .tag{font-size:.75rem}
+  .h-trilho{gap:1.2rem;padding:0 1.4rem}
+  .slide,.h-fim{height:min(58vh,470px)}
+  .h-barra{left:1.4rem;right:1.4rem}
   .form{padding:1.6rem}
-  .print:nth-child(n){transform:none}
   .zap{display:flex}
-  footer{flex-direction:column;text-align:center}
+  .rod-base{flex-direction:column;text-align:center}
 }
 </style>
 </head>
-<body>
+<body class="carregando">
 <div class="grao" aria-hidden="true"></div>
+<div class="cursor" id="cursor" aria-hidden="true"><span>ver</span></div>
+<div class="progresso" id="progresso" aria-hidden="true"></div>
+
+<!-- abertura -->
+<div class="abertura" id="abertura" aria-hidden="true">
+  <img src="img/logo-grande.png" alt="">
+  <span class="frase">design e posts para Instagram</span>
+  <span class="conta" id="conta">0</span>
+  <div class="barra"><i id="barra"></i></div>
+</div>
 
 <!-- ícones -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-seta" viewBox="0 0 12 20"><path d="M2 2l8 8-8 8" stroke="currentColor" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="i-zap" viewBox="0 0 24 24"><path fill="currentColor" d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.7.63.71.22 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35m-5.42 7.4a9.87 9.87 0 01-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 01-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 012.89 6.99c0 5.45-4.44 9.88-9.89 9.88m8.41-18.3A11.82 11.82 0 0012.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 005.68 1.45c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.17-3.48-8.41z"/></symbol>
   <symbol id="i-insta" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor"/></symbol>
+  <symbol id="s-coracao" viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 7.9 3.6 4.5 7 4.5c2 0 3.6 1.1 5 3 1.4-1.9 3-3 5-3 3.4 0 5.6 3.4 4.3 6.8-1.8 4.6-9.3 9.2-9.3 9.2z"/></symbol>
+  <symbol id="s-balao" viewBox="0 0 24 24"><path d="M20.5 11.5a8.5 8.5 0 0 1-12.4 7.6L3.5 20.5l1.4-4.4A8.5 8.5 0 1 1 20.5 11.5z"/></symbol>
+  <symbol id="s-envia" viewBox="0 0 24 24"><path d="M21.5 3 3 10.2l7.3 2.6L13 20.5 21.5 3zM10.3 12.8 21.5 3"/></symbol>
+  <symbol id="s-salva" viewBox="0 0 24 24"><path d="M6 3.5h12v17l-6-4.6-6 4.6z"/></symbol>
+  <symbol id="s-cursor" viewBox="0 0 24 24"><path d="M5 3l14 8.3-6.1 1.4 3.7 6.6-2.6 1.4-3.6-6.6L6 18.3z"/></symbol>
+  <symbol id="s-estrela" viewBox="0 0 24 24"><path d="M12 2c.6 5.4 2.7 8.6 8 10-5.3 1.4-7.4 4.6-8 10-.6-5.4-2.7-8.6-8-10 5.3-1.4 7.4-4.6 8-10z"/></symbol>
+  <symbol id="s-play" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M10 8.5v7l5.5-3.5z"/></symbol>
+  <symbol id="s-grade" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></symbol>
   <symbol id="i-local" viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 10-14 0c0 5.8 7 12 7 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></symbol>
 </svg>
 
 <header class="nav" id="nav">
-  <a href="#topo" class="nav-logo" aria-label="Agência Shaul, início"><img src="img/logo-branca.png" alt="shaul7"></a>
+  <a href="#topo" class="nav-logo" aria-label="Agência Shaul, início"><img src="img/logo-grande.png" alt="shaul7"></a>
   <ul class="nav-links">
     <li><a href="#trabalhos">trabalhos</a></li>
     <li><a href="#servicos">serviços</a></li>
     <li><a href="#como">como funciona</a></li>
     <li><a href="#contato">contato</a></li>
   </ul>
-  <a class="btn btn-claro" href="https://wa.me/5518996297198?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20um%20or%C3%A7amento." target="_blank" rel="noopener">pedir orçamento <span class="seta"><svg><use href="#i-seta"/></svg></span></a>
+  <a class="btn btn-claro ima" href="https://wa.me/5518996297198?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20um%20or%C3%A7amento." target="_blank" rel="noopener">pedir orçamento <span class="seta"><svg><use href="#i-seta"/></svg></span></a>
 </header>
 
 <main id="topo">
 
 <!-- HERO -->
-<section class="hero luz">
-  <div class="vetor v-linhas" aria-hidden="true"></div>
-  <div class="vetor v-estrela sombra-vetor" aria-hidden="true"></div>
-  <div class="vetor v-estrelas sombra-vetor" aria-hidden="true"></div>
+<section class="hero luzes" id="hero" data-simbolos="18" style="--gx:50%;--gy:40%">
+  <div class="vetor v-linhas" data-vel="-.08" aria-hidden="true"></div>
+  <div class="holofote" id="holofote" aria-hidden="true"></div>
+  <svg class="orbita" data-orbita aria-hidden="true"></svg>
+  <div class="vetor v-estrela sombra-vetor estrela-hero" data-rola=".25" aria-hidden="true"></div>
 
-  <span class="hero-rotulo">design e posts para você vender mais pelo Instagram</span>
-  <h1>
-    <span class="linha">seu produto é bom. mas o seu perfil</span>
-    <span class="grande">passa <span class="palavra-selo"><em>confiança?</em><span class="selo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 2l16 9.5-7 1.6 4.2 7.4-3 1.6-4.1-7.4L5 19z" fill="#EEE8E7" stroke="#1E1F1F" stroke-width="1.4" stroke-linejoin="round"/></svg><span>@agenciashaul</span></span></span></span>
-  </h1>
-  <p class="hero-texto">Quem entra no seu perfil decide rápido se compra de você. <b>Nós criamos os posts, os carrosséis e cuidamos do seu Instagram para você vender mais:</b> mais gente confiando, mais clientes chamando no seu WhatsApp.</p>
-  <div class="hero-botoes">
-    <a class="btn btn-claro" href="https://wa.me/5518996297198?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20um%20or%C3%A7amento." target="_blank" rel="noopener">pedir orçamento no WhatsApp <span class="seta"><svg><use href="#i-seta"/></svg></span></a>
-    <a class="btn btn-linha" href="#trabalhos">ver os trabalhos</a>
+  <div class="centro-hero">
+    <div class="pilula aparece-hero" style="transition-delay:.4s"><i></i>design e posts para Instagram <b>@agenciashaul</b></div>
+    <h1>
+      <span class="mascara linha"><span>seu produto é bom. mas o seu perfil</span></span>
+      <span class="mascara grande"><span style="transition-delay:.12s"><span class="letras" aria-label="passa"><span style="--i:0">p</span><span style="--i:1">a</span><span style="--i:2">s</span><span style="--i:3">s</span><span style="--i:4">a</span></span></span></span>
+      <span class="mascara grande recuo" style="padding-bottom:.2em;margin-bottom:-.2em"><span style="transition-delay:.22s"><span class="palavra-selo"><em>confiança?</em><span class="selo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 2l16 9.5-7 1.6 4.2 7.4-3 1.6-4.1-7.4L5 19z" fill="#EEE8E7" stroke="#1E1F1F" stroke-width="1.4" stroke-linejoin="round"/></svg><span>@agenciashaul</span></span></span></span></span>
+    </h1>
+    <div class="hero-base aparece-hero">
+      <p class="hero-texto">Quem entra no seu perfil decide rápido se compra de você. <b>Nós criamos os posts, os carrosséis e cuidamos do seu Instagram para você vender mais:</b> mais gente confiando, mais clientes chamando no seu WhatsApp.</p>
+      <div class="hero-botoes">
+        <a class="btn btn-claro ima" href="https://wa.me/5518996297198?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20um%20or%C3%A7amento." target="_blank" rel="noopener">pedir orçamento no WhatsApp <span class="seta"><svg><use href="#i-seta"/></svg></span></a>
+        <a class="btn btn-linha ima" href="#trabalhos">ver os trabalhos</a>
+      </div>
+    </div>
   </div>
-  <div class="hero-rodape" aria-hidden="true"><span>@agenciashaul</span><span class="quad"><svg viewBox="0 0 12 20"><use href="#i-seta"/></svg></span></div>
+
+  <div class="hero-rodape aparece-hero" style="transition-delay:1.2s">
+    <a href="https://www.instagram.com/agenciashaul/" target="_blank" rel="noopener"><svg><use href="#i-insta"/></svg>siga @agenciashaul</a>
+    <a href="#motivo" class="desce">role para ver <span><svg viewBox="0 0 12 20"><use href="#i-seta"/></svg></span></a>
+  </div>
 </section>
 
 <!-- FAIXA -->
 <div class="faixa" aria-hidden="true">
-  <div class="faixa-trilho">
-    <span>vender mais</span><span>confiança</span><span>mais clientes</span><span>posicionamento</span><span>mais vendas</span><span>credibilidade</span>
-    <span>vender mais</span><span>confiança</span><span>mais clientes</span><span>posicionamento</span><span>mais vendas</span><span>credibilidade</span>
+  <div class="faixa-trilho contra" id="faixa2">
+    <span>arte de posts</span><span>carrossel</span><span>gestão de perfil</span><span>tráfego pago</span>
+    <span>arte de posts</span><span>carrossel</span><span>gestão de perfil</span><span>tráfego pago</span>
+    <span>arte de posts</span><span>carrossel</span><span>gestão de perfil</span><span>tráfego pago</span>
+    <span>arte de posts</span><span>carrossel</span><span>gestão de perfil</span><span>tráfego pago</span>
   </div>
 </div>
 
-<!-- A DOR -->
-<section class="dor centro luz">
-  <div class="vetor v-montanha" aria-hidden="true"></div>
-  <span class="rotulo aparece">o motivo</span>
-  <h2 class="titulo centro aparece">não é sobre deixar bonito. é sobre parecer <em>profissional</em> o suficiente para conseguir vender.</h2>
-  <p class="dor-frase aparece">Quem confia, compra. Simples assim. Veja o que você ganha quando o seu perfil tem cara de marca:</p>
+<!-- 02 O MOTIVO -->
+<section class="dor luzes" id="motivo" data-simbolos="9" style="--gx:85%;--gy:10%">
+  <div class="vetor v-montanha" data-vel=".1" aria-hidden="true"></div>
+  <div class="dor-topo">
+    <div>
+      <div class="num aparece"><b>02</b> o motivo</div>
+      <h2 class="titulo palavras">não é sobre deixar bonito. é sobre parecer <em>profissional</em> o suficiente para conseguir vender.</h2>
+    </div>
+    <p class="dor-frase aparece">Quem confia, compra. Simples assim. Veja o que você ganha quando o seu perfil tem cara de marca:</p>
+  </div>
   <div class="antes-depois">
-    <article class="ad aparece">
+    <article class="ad aparece inclina">
       <span class="antes">cada post de um jeito</span>
       <div class="depois">clientes que <em>lembram de você</em></div>
       <p>Cores, fontes e capas que se repetem. Quem vê o seu post já sabe que é você e volta quando quer comprar.</p>
     </article>
-    <article class="ad aparece" style="transition-delay:.1s">
+    <article class="ad aparece inclina" style="transition-delay:.12s">
       <span class="antes">capa que ninguém lê</span>
       <div class="depois">mais gente <em>parando</em> no seu post</div>
       <p>Capa com uma frase curta e uma palavra em destaque. Mais gente lê, mais gente chega até a sua oferta.</p>
     </article>
-    <article class="ad aparece" style="transition-delay:.2s">
+    <article class="ad aparece inclina" style="transition-delay:.24s">
       <span class="antes">texto que cansa</span>
       <div class="depois">mais clientes <em>chamando você</em></div>
       <p>Carrossel com uma ideia por slide e o convite para falar com você no final. Quem chega ao fim, chama.</p>
@@ -347,115 +675,147 @@ footer nav a:hover{opacity:1;color:var(--off)}
   </div>
 </section>
 
-<!-- TRABALHOS -->
-<section class="trabalhos luz" id="trabalhos">
-  <div class="vetor v-linhas" aria-hidden="true"></div>
-  <div class="trab-topo">
-    <div>
-      <span class="rotulo aparece">trabalhos</span>
-      <h2 class="titulo aparece">posts que já <em>saíram</em> daqui.</h2>
+<!-- 03 TRABALHOS: a janela cresce até a tela inteira -->
+<section class="vitrine" id="trabalhos">
+  <div class="palco luzes" style="--gx:50%;--gy:50%">
+    <div class="vetor v-linhas" aria-hidden="true"></div>
+    <div class="vit-topo" id="vitTopo">
+      <div class="num"><b>03</b> trabalhos</div>
+      <p>Capas e carrosséis feitos pela Shaul para o próprio perfil. Role para abrir.</p>
     </div>
-    <p class="aparece">Capas e carrosséis feitos pela Shaul para o próprio perfil. O mesmo cuidado vai para o seu perfil, para ele vender por você.</p>
-  </div>
-  <div class="grade">
-    <figure class="aparece"><img src="img/capa-mudou.webp" alt="Capa: O mercado mudou... E a sua empresa, ainda não?" loading="lazy"></figure>
-    <figure class="aparece"><img src="img/capa-derrubou.webp" alt="Capa: A IA te indicou. O seu perfil te derrubou." loading="lazy"></figure>
-    <figure class="aparece"><img src="img/capa-blackfriday.webp" alt="Capa: Seu perfil aguenta a Black Friday?" loading="lazy"></figure>
-    <figure class="aparece"><img src="img/capa-golpista.webp" alt="Capa: O golpista tem um perfil mais bonito que o seu." loading="lazy"></figure>
-    <figure class="aparece"><img src="img/capa-minimalista.webp" alt="Capa: Toda marca grande está ficando minimalista. E isso é de propósito." loading="lazy"></figure>
-    <figure class="aparece"><img src="img/capa-carrossel.webp" alt="Capa: o chefe do Instagram mandou postar carrossel. E por quê?" loading="lazy"></figure>
-    <figure class="aparece"><img src="img/capa-ia.webp" alt="Capa: seu concorrente já faz post com inteligência artificial. E você?" loading="lazy"></figure>
-    <figure class="cta aparece">
-      <p>o próximo perfil vendendo mais pode ser <em>o seu.</em></p>
-      <a href="https://www.instagram.com/agenciashaul/" target="_blank" rel="noopener">ver todos no Instagram <svg width="9" height="14"><use href="#i-seta"/></svg></a>
-    </figure>
-  </div>
-
-  <div class="carrossel-bloco">
-    <h3 class="aparece">um carrossel <em>inteiro</em>, do primeiro ao último slide</h3>
-    <p class="aparece">"O mercado mudou": 8 slides, uma ideia em cada um.</p>
-    <div class="trilho aparece" tabindex="0" aria-label="Slides do carrossel O mercado mudou">
-      <img src="img/mudou-01.webp" alt="Slide 1" loading="lazy"><img src="img/mudou-02.webp" alt="Slide 2" loading="lazy"><img src="img/mudou-03.webp" alt="Slide 3" loading="lazy"><img src="img/mudou-04.webp" alt="Slide 4" loading="lazy"><img src="img/mudou-05.webp" alt="Slide 5" loading="lazy"><img src="img/mudou-06.webp" alt="Slide 6" loading="lazy"><img src="img/mudou-07.webp" alt="Slide 7" loading="lazy"><img src="img/mudou-08.webp" alt="Slide 8" loading="lazy">
+    <div class="janela" id="janela">
+      <div class="mosaico" id="mosaico">
+        <img src="img/capa-mudou.webp" alt="Capa: O mercado mudou... E a sua empresa, ainda não?" loading="lazy">
+        <img src="img/capa-derrubou.webp" alt="Capa: A IA te indicou. O seu perfil te derrubou." loading="lazy">
+        <img src="img/capa-blackfriday.webp" alt="Capa: Seu perfil aguenta a Black Friday?" loading="lazy">
+        <img src="img/capa-golpista.webp" alt="Capa: O golpista tem um perfil mais bonito que o seu." loading="lazy">
+        <img src="img/capa-minimalista.webp" alt="Capa: Toda marca grande está ficando minimalista. E isso é de propósito." loading="lazy">
+        <img src="img/capa-carrossel.webp" alt="Capa: o chefe do Instagram mandou postar carrossel. E por quê?" loading="lazy">
+        <img src="img/capa-ia.webp" alt="Capa: seu concorrente já faz post com inteligência artificial. E você?" loading="lazy">
+        <img src="img/mudou-03.webp" alt="Slide do carrossel O mercado mudou" loading="lazy">
+      </div>
     </div>
-    <div class="trilho-dica">arrasta para o lado <svg width="8" height="13" style="color:var(--caramelo)"><use href="#i-seta"/></svg></div>
+    <span class="tag" data-x="-1" data-y="-.6" style="left:24%;top:30%">arte de posts</span>
+    <span class="tag escura" data-x="1" data-y="-.4" style="right:22%;top:40%">carrossel</span>
+    <span class="tag escura" data-x="-1" data-y=".5" style="left:21%;top:66%">gestão de perfil</span>
+    <span class="tag" data-x="1" data-y=".7" style="right:25%;top:78%">tráfego pago</span>
+    <div class="vit-final" id="vitFinal">
+      <h2 class="titulo">posts que já <em>saíram</em> daqui.</h2>
+      <p>O mesmo cuidado vai para o seu perfil, para ele vender por você.</p>
+      <a class="btn btn-claro ima" href="https://www.instagram.com/agenciashaul/" target="_blank" rel="noopener">ver todos no Instagram <span class="seta"><svg><use href="#i-seta"/></svg></span></a>
+    </div>
   </div>
 </section>
 
-<!-- SERVIÇOS -->
-<section class="servicos luz" id="servicos">
-  <div class="vetor v-linhas" aria-hidden="true"></div>
-  <div class="vetor v-estrela" aria-hidden="true" style="filter:drop-shadow(5px 8px 7px rgba(30,31,31,.22))"></div>
-  <span class="rotulo aparece">serviços</span>
-  <h2 class="titulo aparece">o que <em>nós</em> fazemos para você vender mais.</h2>
-  <div class="lista-serv">
-    <article class="serv aparece">
-      <span class="n">01</span>
-      <h3>arte de posts</h3>
-      <p>Posts com a cara da sua marca, para quem passa pelo feed parar, confiar e comprar de você.</p>
-    </article>
-    <article class="serv aparece" style="transition-delay:.08s">
-      <span class="n">02</span>
-      <h3>carrossel</h3>
-      <p>Capa que chama, slides que convencem e um final que traz a pessoa para a sua conversa, pronta para comprar.</p>
-    </article>
-    <article class="serv aparece" style="transition-delay:.16s">
-      <span class="n">03</span>
-      <h3>gestão de perfil</h3>
-      <p>Nós cuidamos do seu Instagram com padrão e frequência. Você cuida do seu negócio e o perfil trabalha vendendo por você.</p>
-    </article>
-    <article class="serv aparece" style="transition-delay:.24s">
-      <span class="n">04</span>
-      <h3>tráfego pago</h3>
-      <p>Anúncios que levam o seu perfil a quem tem chance de comprar. Mais gente certa chegando até você.</p>
-    </article>
+<!-- 04 UM CARROSSEL INTEIRO, NA HORIZONTAL -->
+<section class="horiz" id="horiz">
+  <div class="h-palco luzes" data-simbolos="7" style="--gx:30%;--gy:50%">
+    <div class="h-trilho" id="hTrilho">
+      <div class="h-intro">
+        <div class="num"><b>04</b> um carrossel por dentro</div>
+        <h2 class="titulo">um carrossel <em>inteiro</em>, do primeiro ao último slide.</h2>
+        <p>"O mercado mudou": 8 slides, uma ideia em cada um.</p>
+      </div>
+      <figure class="slide"><img src="img/mudou-01.webp" alt="Slide 1 do carrossel O mercado mudou" loading="lazy"><span class="n">01</span></figure>
+      <figure class="slide"><img src="img/mudou-02.webp" alt="Slide 2" loading="lazy"><span class="n">02</span></figure>
+      <figure class="slide"><img src="img/mudou-03.webp" alt="Slide 3" loading="lazy"><span class="n">03</span></figure>
+      <figure class="slide"><img src="img/mudou-04.webp" alt="Slide 4" loading="lazy"><span class="n">04</span></figure>
+      <figure class="slide"><img src="img/mudou-05.webp" alt="Slide 5" loading="lazy"><span class="n">05</span></figure>
+      <figure class="slide"><img src="img/mudou-06.webp" alt="Slide 6" loading="lazy"><span class="n">06</span></figure>
+      <figure class="slide"><img src="img/mudou-07.webp" alt="Slide 7" loading="lazy"><span class="n">07</span></figure>
+      <figure class="slide"><img src="img/mudou-08.webp" alt="Slide 8" loading="lazy"><span class="n">08</span></figure>
+      <div class="h-fim">
+        <div class="vetor v-estrela gira" aria-hidden="true"></div>
+        <p>o próximo perfil vendendo mais pode ser <em>o seu.</em></p>
+        <a class="btn btn-claro ima" href="https://wa.me/5518996297198?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20um%20or%C3%A7amento." target="_blank" rel="noopener">pedir orçamento <span class="seta"><svg><use href="#i-seta"/></svg></span></a>
+      </div>
+    </div>
+    <div class="h-barra" aria-hidden="true"><span id="hConta">01</span><span class="linha"><i id="hLinha"></i></span><span>08</span></div>
   </div>
+</section>
+
+<!-- 05 SERVIÇOS -->
+<section class="servicos luzes" id="servicos" data-simbolos="9" style="--gx:15%;--gy:0%">
+  <div class="vetor v-linhas" data-vel="-.06" aria-hidden="true"></div>
+  <div class="vetor v-estrela" data-rola=".2" aria-hidden="true" style="filter:drop-shadow(5px 8px 7px rgba(30,31,31,.22))"></div>
+  <div class="num aparece"><b>05</b> serviços</div>
+  <h2 class="titulo palavras">o que <em>nós</em> fazemos para você vender mais.</h2>
+  <ul class="lista-serv">
+    <li class="serv aparece" data-img="img/capa-golpista.webp">
+      <span class="n">01</span><h3>arte de posts</h3>
+      <p>Posts com a cara da sua marca, para quem passa pelo feed parar, confiar e comprar de você.</p>
+      <span class="ir"><svg viewBox="0 0 12 20"><use href="#i-seta"/></svg></span>
+    </li>
+    <li class="serv aparece" data-img="img/capa-carrossel.webp">
+      <span class="n">02</span><h3>carrossel</h3>
+      <p>Capa que chama, slides que convencem e um final que traz a pessoa para a sua conversa, pronta para comprar.</p>
+      <span class="ir"><svg viewBox="0 0 12 20"><use href="#i-seta"/></svg></span>
+    </li>
+    <li class="serv aparece" data-img="img/capa-minimalista.webp">
+      <span class="n">03</span><h3>gestão de perfil</h3>
+      <p>Nós cuidamos do seu Instagram com padrão e frequência. Você cuida do seu negócio e o perfil trabalha vendendo por você.</p>
+      <span class="ir"><svg viewBox="0 0 12 20"><use href="#i-seta"/></svg></span>
+    </li>
+    <li class="serv aparece" data-img="img/capa-derrubou.webp">
+      <span class="n">04</span><h3>tráfego pago</h3>
+      <p>Anúncios que levam o seu perfil a quem tem chance de comprar. Mais gente certa chegando até você.</p>
+      <span class="ir"><svg viewBox="0 0 12 20"><use href="#i-seta"/></svg></span>
+    </li>
+  </ul>
   <div class="serv-nota aparece">
     <p>Cada negócio pede uma coisa para vender mais. Por isso o preço é <b>sob orçamento</b>, pelo WhatsApp.</p>
-    <a class="btn btn-escuro" href="https://wa.me/5518996297198?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20um%20or%C3%A7amento." target="_blank" rel="noopener">pedir orçamento <span class="seta"><svg><use href="#i-seta"/></svg></span></a>
+    <a class="btn btn-escuro ima" href="https://wa.me/5518996297198?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20um%20or%C3%A7amento." target="_blank" rel="noopener">pedir orçamento <span class="seta"><svg><use href="#i-seta"/></svg></span></a>
   </div>
 </section>
+<div class="previa" id="previa" aria-hidden="true"><img src="img/capa-golpista.webp" alt=""></div>
 
-<!-- COMO FUNCIONA -->
-<section class="passos luz" id="como">
-  <div class="vetor v-montanha" aria-hidden="true"></div>
-  <span class="rotulo aparece">como funciona</span>
-  <h2 class="titulo aparece">do primeiro "oi" ao perfil <em>que vende.</em></h2>
-  <div class="lista-passos">
-    <article class="passo aparece">
+<!-- 06 COMO FUNCIONA -->
+<section class="passos luzes" id="como" data-simbolos="8" style="--gx:50%;--gy:100%">
+  <div class="vetor v-montanha" data-vel=".1" aria-hidden="true"></div>
+  <div class="num aparece"><b>06</b> como funciona</div>
+  <h2 class="titulo palavras">do primeiro "oi" ao perfil <em>que vende.</em></h2>
+  <div class="lista-passos" id="listaPassos">
+    <div class="trilha" aria-hidden="true"><i id="trilha"></i></div>
+    <article class="passo aparece"><span class="bola">1</span><div class="caixa">
       <h3>você chama no WhatsApp</h3>
-      <p>Conta o que vende e o que está te incomodando no seu perfil hoje.</p>
+      <p>Conta o que vende e o que está te incomodando no seu perfil hoje.</p></div>
     </article>
-    <article class="passo aparece" style="transition-delay:.1s">
+    <article class="passo aparece" style="transition-delay:.1s"><span class="bola">2</span><div class="caixa">
       <h3>nós olhamos o seu perfil</h3>
-      <p>Entendemos o seu negócio e o que precisa mudar para o perfil começar a vender.</p>
+      <p>Entendemos o seu negócio e o que precisa mudar para o perfil começar a vender.</p></div>
     </article>
-    <article class="passo aparece" style="transition-delay:.2s">
+    <article class="passo aparece" style="transition-delay:.2s"><span class="bola">3</span><div class="caixa">
       <h3>você recebe o orçamento</h3>
-      <p>Com o que vamos fazer e o valor. Fechou, nós começamos.</p>
+      <p>Com o que vamos fazer e o valor. Fechou, nós começamos.</p></div>
     </article>
   </div>
 </section>
 
-<!-- FEEDBACKS -->
-<section class="prova centro luz">
-  <div class="vetor v-estrelas sombra-vetor" aria-hidden="true"></div>
-  <span class="rotulo aparece">feedbacks</span>
-  <h2 class="titulo centro aparece">o que os clientes <em>disseram.</em></h2>
-  <p class="centro aparece">Prints reais do WhatsApp, do jeito que chegaram.</p>
+<!-- 07 FEEDBACKS -->
+<section class="prova luzes" data-simbolos="9" style="--gx:50%;--gy:30%">
+  <div class="vetor v-estrelas sombra-vetor" data-vel="-.15" aria-hidden="true"></div>
+  <div class="num aparece"><b>07</b> feedbacks</div>
+  <h2 class="titulo palavras">o que os clientes <em>disseram.</em></h2>
+  <p class="aparece">Prints reais do WhatsApp, do jeito que chegaram.</p>
   <div class="prints">
-    <div class="print aparece"><img src="img/feedback-1.jpg" alt="Print de WhatsApp: cliente elogiando o trabalho" loading="lazy"></div>
-    <div class="print aparece" style="transition-delay:.1s"><img src="img/feedback-2.jpg" alt="Print de WhatsApp: cliente responde Gosteiii, topp" loading="lazy"></div>
-    <div class="print aparece" style="transition-delay:.2s"><img src="img/feedback-3.jpg" alt="Print de WhatsApp: cliente responde Top, Ficou MT bom, Parabéns" loading="lazy"></div>
+    <div class="print revela" data-vel=".06" data-gira="-2"><img src="img/feedback-1.jpg" alt="Print de WhatsApp: cliente elogiando o trabalho" loading="lazy"></div>
+    <div class="print revela" data-vel="-.08" data-gira="1.5" style="transition-delay:.1s"><img src="img/feedback-2.jpg" alt="Print de WhatsApp: cliente responde Gosteiii, topp" loading="lazy"></div>
+    <div class="print revela" data-vel=".1" data-gira="-1" style="transition-delay:.2s"><img src="img/feedback-3.jpg" alt="Print de WhatsApp: cliente responde Top, Ficou MT bom, Parabéns" loading="lazy"></div>
   </div>
 </section>
 
-<!-- CONTATO -->
-<section class="contato luz" id="contato">
-  <div class="vetor v-linhas" aria-hidden="true"></div>
-  <div class="vetor v-estrela sombra-vetor" aria-hidden="true"></div>
+<!-- PALAVRA GIGANTE: anda para o lado conforme a rolagem -->
+<div class="gigante" id="gigante" aria-hidden="true">
+  <div class="linha-g" data-dir="-1"><span class="cheia">vender mais</span><span class="vazada">vender mais</span><span class="cheia">vender mais</span><span class="vazada">vender mais</span></div>
+  <div class="linha-g" data-dir="1"><span class="vazada">passar confiança</span><span class="cheia">passar confiança</span><span class="vazada">passar confiança</span><span class="cheia">passar confiança</span></div>
+</div>
+
+<!-- 08 CONTATO -->
+<section class="contato luzes" id="contato" data-simbolos="8" style="--gx:80%;--gy:60%">
+  <div class="vetor v-linhas" data-vel="-.06" aria-hidden="true"></div>
   <div>
-    <span class="rotulo aparece">contato</span>
-    <h2 class="titulo aparece">que tal ter um perfil que faz o cliente <em>chamar você?</em></h2>
+    <div class="num aparece"><b>08</b> contato</div>
+    <h2 class="titulo palavras">que tal ter um perfil que faz o cliente <em>chamar você?</em></h2>
     <div class="contato-info aparece">
       <a href="https://wa.me/5518996297198" target="_blank" rel="noopener"><svg><use href="#i-zap"/></svg>(18) 99629-7198</a>
       <a href="https://www.instagram.com/agenciashaul/" target="_blank" rel="noopener"><svg><use href="#i-insta"/></svg>@agenciashaul</a>
@@ -477,42 +837,439 @@ footer nav a:hover{opacity:1;color:var(--off)}
       </select>
     </div>
     <div class="campo"><label for="msg">mensagem</label><textarea id="msg" placeholder="O que está te incomodando no seu perfil hoje?"></textarea></div>
-    <button class="btn btn-claro" type="submit">enviar pelo WhatsApp <span class="seta"><svg><use href="#i-seta"/></svg></span></button>
+    <button class="btn btn-claro ima" type="submit">enviar pelo WhatsApp <span class="seta"><svg><use href="#i-seta"/></svg></span></button>
   </form>
 </section>
 
 </main>
 
 <footer>
-  <img src="img/logo-branca.png" alt="shaul7">
-  <span>© 2026 Agência Shaul. Design e posts para Instagram.</span>
-  <nav>
-    <a href="https://www.instagram.com/agenciashaul/" target="_blank" rel="noopener">Instagram</a>
-    <a href="https://wa.me/5518996297198" target="_blank" rel="noopener">WhatsApp</a>
-  </nav>
+  <div class="rod-palco" style="position:relative">
+    <svg class="orbita" data-orbita aria-hidden="true"></svg>
+    <div class="rod-logo" id="rodLogo"><img src="img/logo-grande.png" alt="shaul7" loading="lazy"></div>
+  </div>
+  <div class="rod-base">
+    <span>© 2026 Agência Shaul. Design e posts para Instagram.</span>
+    <nav>
+      <a href="https://www.instagram.com/agenciashaul/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://wa.me/5518996297198" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="#topo">voltar ao topo</a>
+    </nav>
+  </div>
 </footer>
 
 <a class="zap" href="https://wa.me/5518996297198?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20um%20or%C3%A7amento." target="_blank" rel="noopener" aria-label="Pedir orçamento no WhatsApp"><svg><use href="#i-zap"/></svg>orçamento</a>
 
 <script>
-// menu fica escuro ao rolar
-const nav=document.getElementById('nav');
-const marca=()=>nav.classList.toggle('rolou',scrollY>40);
-addEventListener('scroll',marca,{passive:true});marca();
+const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const toque = matchMedia('(hover: none), (pointer: coarse)').matches;
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const lim = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const suave = t => 1 - Math.pow(1 - t, 3);
 
-// entrada suave
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('ok');io.unobserve(e.target)}}),{threshold:.12});
-document.querySelectorAll('.aparece').forEach(el=>io.observe(el));
+/* ---- abertura: contador de 0 a 100, depois a cortina sobe ---- */
+function abrir() {
+  document.body.classList.remove('carregando');
+  document.body.classList.add('pronto');
+}
+if (calmo) { $('#abertura').remove(); abrir(); }
+else {
+  const ini = performance.now(), dur = 1500;
+  (function conta(t) {
+    const p = suave(lim((t - ini) / dur));
+    $('#conta').textContent = Math.round(p * 100);
+    $('#barra').style.transform = `scaleX(${p})`;
+    if (p < 1) return requestAnimationFrame(conta);
+    $('#abertura').classList.add('sai');
+    setTimeout(abrir, 250);
+    setTimeout(() => $('#abertura').remove(), 1300);
+  })(ini);
+}
 
-// formulário vira mensagem no WhatsApp
-document.getElementById('form').addEventListener('submit',e=>{
+/* ---- títulos: cada palavra sobe de uma máscara ---- */
+$$('.palavras').forEach(h => {
+  let i = 0;
+  const parte = no => {
+    [...no.childNodes].forEach(n => {
+      if (n.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach(p => {
+          if (!p) return;
+          if (/^\s+$/.test(p)) { frag.append(' '); return; }
+          const w = document.createElement('span'); w.className = 'w';
+          const s = document.createElement('span'); s.textContent = p; s.style.setProperty('--i', i++);
+          w.append(s); frag.append(w);
+        });
+        n.replaceWith(frag);
+      } else parte(n);
+    });
+  };
+  parte(h);
+});
+
+/* ---- entrada ao aparecer na tela ---- */
+// conferido a cada quadro: também acende o que ficou para trás num pulo de link
+/* ---- órbitas: duas elipses tortas com estrelas dando a volta ---- */
+const NS = 'http://www.w3.org/2000/svg';
+const estrela4 = 'M0 -15C1.2 -4.5 4.5 -1.2 13 0C4.5 1.2 1.2 4.5 0 15C-1.2 4.5 -4.5 1.2 -13 0C-4.5 -1.2 -1.2 -4.5 0 -15Z';
+$$('[data-orbita]').forEach((svg, n) => {
+  svg.setAttribute('viewBox', '0 0 1000 500');
+  const aneis = [
+    { rx: 455, ry: 135, giro: -4, dur: 26, astros: [{ ini: 0, escala: 1.25 }, { ini: .5, escala: .7, claro: true }] },
+    { rx: 410, ry: 92, giro: -24, dur: 19, astros: [{ ini: .2, escala: 1 }, { ini: .72, escala: .8 }] }
+  ];
+  aneis.forEach((a, i) => {
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('transform', `rotate(${a.giro} 500 250)`);
+    const id = `orb${n}-${i}`;
+    const p = document.createElementNS(NS, 'path');
+    p.setAttribute('id', id);
+    p.setAttribute('class', 'trilho' + (i ? ' b' : ''));
+    p.setAttribute('pathLength', '1');
+    p.setAttribute('d', `M${500 - a.rx} 250a${a.rx} ${a.ry} 0 1 0 ${a.rx * 2} 0a${a.rx} ${a.ry} 0 1 0 ${-a.rx * 2} 0`);
+    g.append(p);
+    a.astros.forEach(s => {
+      const st = document.createElementNS(NS, 'path');
+      st.setAttribute('d', estrela4);
+      st.setAttribute('class', 'astro' + (s.claro ? ' claro' : ''));
+      st.setAttribute('transform', `scale(${s.escala})`);
+      const wrap = document.createElementNS(NS, 'g');
+      wrap.append(st);
+      if (calmo) {
+        wrap.setAttribute('transform', `translate(${500 + a.rx * Math.cos(s.ini * 6.283)} ${250 + a.ry * Math.sin(s.ini * 6.283)})`);
+      } else {
+        const m = document.createElementNS(NS, 'animateMotion');
+        m.setAttribute('dur', a.dur + 's');
+        m.setAttribute('repeatCount', 'indefinite');
+        m.setAttribute('begin', `-${(s.ini * a.dur).toFixed(2)}s`);
+        const mp = document.createElementNS(NS, 'mpath');
+        mp.setAttribute('href', '#' + id);
+        m.append(mp); wrap.append(m);
+      }
+      g.append(wrap);
+    });
+    svg.append(g);
+  });
+});
+
+let pendentes = $$('.aparece, .palavras, .rod-logo, .revela, footer .orbita');
+if (calmo) { pendentes.forEach(el => el.classList.add('ok')); pendentes = []; }
+function acende() {
+  if (!pendentes.length) return;
+  const lim = innerHeight * .9;
+  pendentes = pendentes.filter(el => {
+    if (el.getBoundingClientRect().top < lim) { el.classList.add('ok'); return false; }
+    return true;
+  });
+}
+
+/* ---- menu: escurece ao rolar, some descendo, volta subindo ---- */
+const nav = $('#nav'), zap = $('.zap'); let ultimo = 0;
+
+/* ---- faixa de palavras: corre sozinha e acelera com a rolagem ---- */
+let vel = 0;
+
+/* ---- vitrine ---- */
+const vit = $('#trabalhos'), jan = $('#janela'), mos = $('#mosaico'), vitTopo = $('#vitTopo'), vitFinal = $('#vitFinal');
+const tags = $$('.vitrine .tag');
+
+/* ---- carrossel horizontal ---- */
+const hor = $('#horiz'), hTr = $('#hTrilho');
+let hDist = 0;
+function mede() {
+  hDist = Math.max(0, hTr.scrollWidth - innerWidth);
+  hor.style.height = (hDist + innerHeight) + 'px';
+}
+addEventListener('resize', mede); addEventListener('load', mede); mede();
+
+/* ---- partes que andam em velocidade diferente (profundidade) ---- */
+const camadas = $$('[data-vel]');
+
+/* ---- mouse ---- */
+let mx = innerWidth / 2, my = innerHeight / 2, cx = mx, cy = my;
+addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; }, { passive: true });
+
+const progresso = el => {
+  const r = el.getBoundingClientRect();
+  return lim(-r.top / (r.height - innerHeight));
+};
+
+/* ---- símbolos do Instagram espalhados em profundidade ----
+   longe: pequenos, apagados e um pouco borrados; meio: nítidos; perto: grandes e desfocados.
+   Os do meio da tela ficam só no fundo, para não brigar com o texto. */
+const tiposSim = ['coracao', 'balao', 'envia', 'salva', 'cursor', 'estrela', 'play', 'grade', '@', 'coracao', 'estrela'];
+let semente = 11;
+const rnd = () => { semente = (semente * 16807) % 2147483647; return (semente - 1) / 2147483646; };
+const simbolos = [];
+$$('[data-simbolos]').forEach(sec => {
+  const n = Math.round(parseInt(sec.dataset.simbolos) * (innerWidth < 640 ? .5 : 1));
+  const caixa = document.createElement('div');
+  caixa.className = 'simbolos'; caixa.setAttribute('aria-hidden', 'true');
+  for (let i = 0; i < n; i++) {
+    let x = i % 2 ? 72 + rnd() * 25 : 3 + rnd() * 25;
+    const meio = rnd() < .22;
+    if (meio) x = 32 + rnd() * 36;
+    const d = meio ? rnd() * .3 : rnd();
+    const s = Math.round(16 + d * 60);
+    const blur = d > .78 ? (d - .78) * 16 : d < .2 ? (.2 - d) * 6 : 0;
+    const o = meio ? .22 : d > .78 ? .45 : .32 + d * .5;
+    const tipo = tiposSim[Math.floor(rnd() * tiposSim.length)];
+    const el = document.createElement('span');
+    el.className = 'sim';
+    el.style.cssText = `left:${x}%;top:${4 + rnd() * 88}%;width:${s}px;height:${s}px;--s:${s}px;--o:${o.toFixed(2)};--t:${(7 + rnd() * 6).toFixed(1)}s;--a:-${(rnd() * 8).toFixed(1)}s;--g:${(rnd() * 16 - 8).toFixed(0)}deg;filter:blur(${blur.toFixed(1)}px)`;
+    if (tipo === '@') el.innerHTML = '<span class="arroba">@</span>';
+    else if (rnd() < .4) el.innerHTML = `<span class="caixinha"><svg><use href="#s-${tipo}"/></svg></span>`;
+    else el.innerHTML = `<svg><use href="#s-${tipo}"/></svg>`;
+    caixa.append(el);
+    simbolos.push({ el, d, sec });
+  }
+  sec.prepend(caixa);
+});
+const holofote = $('#holofote');
+const gigantes = $$('#gigante .linha-g'), gigante = $('#gigante');
+
+/* ---- rolagem suave: a página desliza e freia devagar (só no computador) ---- */
+const maxRola = () => document.documentElement.scrollHeight - innerHeight;
+let alvo = scrollY, atual = scrollY, deslizando = false;
+const suaveOn = !toque && !calmo;
+if (suaveOn) {
+  addEventListener('wheel', e => {
+    if (e.ctrlKey || e.target.closest('textarea, select')) return;
+    e.preventDefault();
+    alvo = lim(alvo + e.deltaY * (e.deltaMode === 1 ? 40 : 1), 0, maxRola());
+  }, { passive: false });
+  // teclado, barra de rolagem e outros: segue a página sem brigar
+  addEventListener('scroll', () => { if (!deslizando) alvo = atual = scrollY; }, { passive: true });
+  // links internos (#trabalhos, #contato...) também deslizam
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const el = document.querySelector(a.getAttribute('href'));
+    if (!el) return;
+    e.preventDefault();
+    alvo = lim(el.getBoundingClientRect().top + scrollY, 0, maxRola());
+  });
+}
+function desliza() {
+  if (!suaveOn) return;
+  const falta = alvo - atual;
+  if (Math.abs(falta) > .4) {
+    deslizando = true;
+    atual += falta * .075;
+    scrollTo(0, atual);
+  } else if (deslizando) {
+    atual = alvo; scrollTo(0, atual);
+    requestAnimationFrame(() => deslizando = false);
+  }
+}
+
+/* ---- elementos das animações novas ---- */
+const barraTopo = $('#progresso');
+const heroTit = $('.hero h1'), heroBase = $('.hero-base');
+const faixa2 = $('#faixa2'); let fx2 = null;
+const tiles = $$('#mosaico img');
+const slides = $$('.slide, .h-fim');
+const rodam = $$('[data-rola]');
+let hSuave = 0, hVel = 0;
+
+function quadro() {
+  desliza();
+  const y = scrollY, vh = innerHeight, vw = innerWidth;
+  if (!document.body.classList.contains('carregando')) acende();
+  barraTopo.style.transform = `scaleX(${lim(y / maxRola())})`;
+
+  // menu
+  nav.classList.toggle('rolou', y > 40);
+  zap.classList.toggle('on', y > vh * .7);
+  if (Math.abs(y - ultimo) > 2) nav.classList.toggle('some', y > ultimo && y > 400);
+  vel += (y - ultimo) * .04; ultimo = y;
+
+  if (!calmo) {
+    const ax = (cx / vw - .5), ay = (cy / vh - .5);
+    // faixa
+    vel *= .9;
+    // uma faixa só, com os serviços (Shaul, 16/11)
+    const meia2 = faixa2.scrollWidth / 2;
+    if (fx2 === null) fx2 = -meia2;
+    fx2 += .5 + Math.abs(vel) * 1;
+    if (fx2 > 0) fx2 -= meia2;
+    faixa2.style.transform = `translate3d(${fx2}px,0,0) skewX(${lim(vel * .6, -8, 8)}deg)`;
+
+    // topo: o título desce mais devagar e some ao rolar
+    if (y < vh * 1.2) {
+      const s = y / vh;
+      heroTit.style.transform = `translate3d(0,${y * .35}px,0) scale(${1 - s * .08})`;
+      heroTit.style.opacity = 1 - s * 1.1;
+      heroBase.style.transform = `translate3d(0,${y * .15}px,0)`;
+      heroBase.style.opacity = 1 - s * 1.4;
+    }
+
+    // símbolos: os de perto andam mais com o mouse e com a rolagem (profundidade)
+    const caixas = new Map();
+    simbolos.forEach(o => {
+      let r = caixas.get(o.sec);
+      if (!r) { r = o.sec.getBoundingClientRect(); caixas.set(o.sec, r); }
+      if (r.bottom < -100 || r.top > vh + 100) return;
+      const k = .25 + o.d * 1.5;
+      const sy = (r.top + r.height / 2 - vh / 2) * o.d * -.3;
+      o.el.style.transform = `translate3d(${(-ax * 46 * k).toFixed(1)}px,${(sy - ay * 34 * k).toFixed(1)}px,0)`;
+    });
+    // holofote do topo segue o mouse devagar
+    if (holofote) holofote.style.transform = `translate3d(${ax * 90}px,${ay * 60 + y * .2}px,0)`;
+    // palavra gigante anda para os lados com a rolagem
+    const rg = gigante.getBoundingClientRect();
+    if (rg.bottom > 0 && rg.top < vh) gigantes.forEach(l => {
+      const dir = parseFloat(l.dataset.dir);
+      const base = dir > 0 ? -l.scrollWidth * .35 : -l.scrollWidth * .05;
+      l.style.transform = `translate3d(${base + (vh - rg.top) * .45 * dir}px,0,0)`;
+    });
+
+    // estrelas que giram conforme a rolagem
+    rodam.forEach(el => el.style.rotate = (y * parseFloat(el.dataset.rola)) + 'deg');
+
+    // profundidade
+    camadas.forEach(el => {
+      const r = el.parentElement.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > vh + 200) return;
+      const meio = r.top + r.height / 2 - vh / 2;
+      const v = parseFloat(el.dataset.vel);
+      const f = parseFloat(el.dataset.fundo || 0);
+      const g = parseFloat(el.dataset.gira || 0);
+      el.style.transform = `translate3d(${-ax * f}px,${meio * -v - ay * f}px,0)` + (g ? ` rotate(${g}deg)` : '');
+    });
+    $$('.etiqueta').forEach(el => {
+      const f = parseFloat(el.dataset.fundo);
+      el.style.translate = `${-ax * f}px ${-ay * f - y * .25}px`;
+    });
+
+    // vitrine: a janela abre até a tela inteira
+    const p = progresso(vit);
+    const a = suave(lim(p / .62));
+    const estreito = vw < 640;
+    const L0 = estreito ? 14 : 30, T0 = estreito ? 30 : 24, B0 = estreito ? 18 : 14;
+    jan.style.setProperty('--t', (T0 * (1 - a)) + '%');
+    jan.style.setProperty('--b', (B0 * (1 - a)) + '%');
+    jan.style.setProperty('--l', (L0 * (1 - a)) + '%');
+    jan.style.setProperty('--r', (22 * (1 - a)) + 'px');
+    mos.style.setProperty('--z', 1.5 - .5 * a);
+    const fim = lim((p - .6) / .25);
+    jan.style.setProperty('--veu', fim * .72);
+    vitFinal.style.setProperty('--fim', fim);
+    vitFinal.style.pointerEvents = fim > .5 ? 'auto' : 'none';
+    // colunas do mosaico se encaixam em alturas diferentes
+    const cols = estreito ? 2 : 4;
+    tiles.forEach((im, i) => {
+      const c = i % cols, lado = c % 2 ? 1 : -1;
+      im.style.transform = `translate3d(0,${lado * (1 - a) * 120 - lado * fim * 24}px,0) rotate(${lado * (1 - a) * 3}deg)`;
+    });
+    vitTopo.style.opacity = 1 - lim(a * 2.2);
+    vitTopo.style.transform = `translateY(${-a * 40}px)`;
+    tags.forEach(t => {
+      const dx = parseFloat(t.dataset.x), dy = parseFloat(t.dataset.y);
+      t.style.transform = `translate3d(${dx * a * vw * .3}px,${dy * a * vh * .5}px,0) rotate(${dx * a * 8}deg)`;
+      t.style.opacity = 1 - lim(a * 1.6);
+    });
+
+    // carrossel horizontal
+    const ph = progresso(hor);
+    // o trilho corre um pouco atrasado (amortecido) e os slides giram em 3D perto das bordas
+    const hAntes = hSuave;
+    hSuave += (ph * hDist - hSuave) * .12;
+    hVel += ((hSuave - hAntes) - hVel) * .2;
+    hTr.style.transform = `translate3d(${-hSuave}px,0,0)`;
+    let perto = 1, menor = 9;
+    slides.forEach((s, i) => {
+      const r = s.getBoundingClientRect();
+      const d = lim(((r.left + r.width / 2) - vw / 2) / vw, -1, 1);
+      if (i < 8 && Math.abs(d) < menor) { menor = Math.abs(d); perto = i + 1; }
+      s.style.transform = `rotateY(${-d * 28}deg) scale(${1 - Math.abs(d) * .14}) skewX(${lim(-hVel * .15, -6, 6)}deg)`;
+      s.style.opacity = 1 - Math.abs(d) * .35;
+    });
+    $('#hLinha').parentElement.parentElement.style.setProperty('--p', ph);
+    $('#hConta').textContent = String(perto).padStart(2, '0');
+
+    // como funciona: a linha enche e acende cada passo
+    const lp = $('#listaPassos').getBoundingClientRect();
+    const pp = lim((vh * .75 - lp.top) / (lp.height * .9));
+    $('#trilha').parentElement.style.setProperty('--p', pp);
+    $$('.passo').forEach((s, i) => s.classList.toggle('aceso', pp >= i / 2 - .02));
+  }
+  requestAnimationFrame(quadro);
+}
+
+/* ---- cursor que segue o mouse ---- */
+const cur = $('#cursor');
+function cursor() {
+  cx += (mx - cx) * .18; cy += (my - cy) * .18;
+  cur.style.transform = `translate3d(${cx}px,${cy}px,0)`;
+  requestAnimationFrame(cursor);
+}
+if (!toque && !calmo) {
+  cur.style.opacity = 1; cursor();
+  document.addEventListener('mouseover', e => {
+    const img = e.target.closest('.mosaico img, .slide, .flutua');
+    const lk = e.target.closest('a, button, .serv');
+    cur.classList.toggle('ver', !!img);
+    cur.classList.toggle('link', !img && !!lk);
+  });
+  document.addEventListener('mouseleave', () => cur.style.opacity = 0);
+  document.addEventListener('mouseenter', () => cur.style.opacity = 1);
+
+  // botões que puxam para o mouse
+  $$('.ima').forEach(b => {
+    b.addEventListener('mousemove', e => {
+      const r = b.getBoundingClientRect();
+      b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * .22}px,${(e.clientY - r.top - r.height / 2) * .32}px)`;
+    });
+    b.addEventListener('mouseleave', () => { b.style.transition = 'transform .6s cubic-bezier(.16,1,.3,1),box-shadow .25s'; b.style.transform = ''; setTimeout(() => b.style.transition = '', 600); });
+  });
+
+  // cartões que inclinam com o mouse
+  $$('.inclina').forEach(c => {
+    c.addEventListener('mousemove', e => {
+      const r = c.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+      c.style.transition = 'transform .15s';
+      c.style.transform = `rotateY(${x * 10}deg) rotateX(${-y * 10}deg) translateZ(10px)`;
+    });
+    c.addEventListener('mouseleave', () => { c.style.transition = ''; c.style.transform = ''; });
+  });
+
+  // serviços: a capa aparece e segue o mouse
+  const pv = $('#previa'), pvImg = pv.querySelector('img');
+  let px = 0, py = 0, pvx = 0, pvy = 0;
+  $$('.serv').forEach(s => {
+    s.addEventListener('mouseenter', () => { pvImg.src = s.dataset.img; pv.classList.add('on'); });
+    s.addEventListener('mouseleave', () => pv.classList.remove('on'));
+  });
+  (function seguir() {
+    px = mx; py = my;
+    const ox = pvx; pvx += (px - pvx) * .12; pvy += (py - pvy) * .12;
+    pv.style.transform = `translate3d(${pvx + 30}px,${pvy - 140}px,0) rotate(${lim((pvx - ox) * .4, -12, 12)}deg)`;
+    requestAnimationFrame(seguir);
+  })();
+}
+
+if (calmo) {
+  // tudo aberto e parado: vitrine aberta e carrossel com rolagem lateral comum
+  jan.style.setProperty('--t', '0%'); jan.style.setProperty('--b', '0%'); jan.style.setProperty('--l', '0%'); jan.style.setProperty('--r', '0px');
+  mos.style.setProperty('--z', 1); jan.style.setProperty('--veu', .72); vitFinal.style.setProperty('--fim', 1); vitFinal.style.pointerEvents = 'auto';
+  vit.style.height = '100vh'; vitTopo.style.opacity = 0; tags.forEach(t => t.style.display = 'none');
+  hor.style.height = 'auto'; hor.querySelector('.h-palco').style.cssText = 'position:relative;height:auto;padding:6rem 0;overflow-x:auto';
+  $('.h-barra').style.display = 'none';
+  $$('.passo').forEach(s => s.classList.add('aceso')); $('#trilha').parentElement.style.setProperty('--p', 1);
+}
+requestAnimationFrame(quadro);
+
+/* ---- formulário vira mensagem no WhatsApp ---- */
+$('#form').addEventListener('submit', e => {
   e.preventDefault();
-  const v=id=>document.getElementById(id).value.trim();
-  let t='Olá! Meu nome é '+v('nome')+'.';
-  if(v('negocio')) t+='\nMeu negócio: '+v('negocio')+'.';
-  if(v('servico')) t+='\nTenho interesse em: '+v('servico')+'.';
-  if(v('msg')) t+='\n\n'+v('msg');
-  window.open('https://wa.me/5518996297198?text='+encodeURIComponent(t),'_blank','noopener');
+  const v = id => document.getElementById(id).value.trim();
+  let t = 'Olá! Meu nome é ' + v('nome') + '.';
+  if (v('negocio')) t += '\nMeu negócio: ' + v('negocio') + '.';
+  if (v('servico')) t += '\nTenho interesse em: ' + v('servico') + '.';
+  if (v('msg')) t += '\n\n' + v('msg');
+  window.open('https://wa.me/5518996297198?text=' + encodeURIComponent(t), '_blank', 'noopener');
 });
 </script>
 </body>
