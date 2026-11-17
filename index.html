@@ -578,9 +578,15 @@ footer{background:var(--fundo)}
 .solto .mascara,.palavras.solto .w{overflow:visible}
 .hero h1{padding:0 .25em}
 .hero h1 em{padding-right:.3em;margin-right:-.24em} /* folga extra para a ponta do "?" */
-/* com a folga maior, a palavra escondida desce mais para não aparecer antes da hora */
-.mascara > span,.palavras .w > span{transform:translateY(150%)}
-.pronto .mascara > span,.palavras.ok .w > span{transform:none}
+/* ENTRADA SEM CORTE (Shaul, 17/11, vídeo: "está ficando cortado na hora de carregar").
+   Antes a palavra subia de dentro de uma caixa que cortava; no meio do caminho aparecia
+   cortada ao meio. Agora nada corta: a palavra aparece subindo um pouco e saindo de um
+   leve desfoque, inteira do começo ao fim. */
+.mascara,.palavras .w{overflow:visible!important}
+.mascara > span{transform:translateY(.32em);opacity:0;filter:blur(12px);transition:transform 1.2s var(--suave),opacity .9s ease,filter 1s ease}
+.pronto .mascara > span{transform:none;opacity:1;filter:none}
+.palavras .w > span{transform:translateY(.45em);opacity:0;transition:transform 1s var(--suave),opacity .8s ease;transition-delay:calc(var(--i) * 45ms)}
+.palavras.ok .w > span{transform:none;opacity:1}
 
 /* parte que está fora da tela descansa: animações pausadas e ícones flutuantes escondidos
    (ninguém vê, e eles continuavam ocupando a placa de vídeo) */
@@ -610,7 +616,7 @@ footer{padding-top:9rem}
 @media (prefers-reduced-motion:reduce){
   .abertura{display:none}
   .grao,.gira,.roda svg.texto,.etiqueta{animation:none}
-  .mascara > span,.palavras .w > span{transform:none!important;transition:none}
+  .mascara > span,.palavras .w > span{transform:none!important;opacity:1!important;filter:none!important;transition:none!important}
   .aparece,.aparece-hero,.flutua,.etiqueta,.selo{opacity:1!important;transform:none!important;transition:none}
   .rod-logo{clip-path:none}
   .revela,.revela.ok{clip-path:none}.revela img{scale:1}
