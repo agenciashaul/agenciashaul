@@ -573,6 +573,11 @@ footer{background:var(--fundo)}
 /* a máscara que faz a palavra subir também cortava as pernas das letras: mais folga embaixo */
 .palavras .w{padding:.12em 0 .32em;margin:-.12em 0 -.32em}
 .mascara{padding:.16em 0 .34em;margin:-.16em 0 -.34em}
+/* depois que o texto termina de subir, a máscara é solta: nada mais corta letra nem selo
+   (Shaul, 17/11: o "?" e o selo do topo ainda cortavam no navegador dele) */
+.solto .mascara,.palavras.solto .w{overflow:visible}
+.hero h1{padding:0 .25em}
+.hero h1 em{padding-right:.3em;margin-right:-.24em} /* folga extra para a ponta do "?" */
 /* com a folga maior, a palavra escondida desce mais para não aparecer antes da hora */
 .mascara > span,.palavras .w > span{transform:translateY(150%)}
 .pronto .mascara > span,.palavras.ok .w > span{transform:none}
@@ -636,7 +641,7 @@ footer{padding-top:9rem}
   .hero h1 .grande{font-size:clamp(3rem,15vw,4.6rem)}
   .hero h1 .recuo{padding-left:0}
   .flutua,.etiqueta,.estrela-hero{display:none}
-  .selo{bottom:-1.5em;right:-.6em} /* afastado para a setinha não cobrir a perna do "ç" */
+  .selo{bottom:-2.1em;right:-.2em} /* mais baixo, para nem a setinha nem a etiqueta cobrirem a perna do "ç" */
   .hero-base{flex-direction:column;align-items:flex-start}
   .hero-botoes .btn-linha{display:none}
   .roda{display:none}
@@ -951,6 +956,8 @@ const suave = t => 1 - Math.pow(1 - t, 3);
 function abrir() {
   document.body.classList.remove('carregando');
   document.body.classList.add('pronto');
+  // terminou de subir: solta as máscaras do topo para nada cortar o "?" e o selo
+  setTimeout(() => document.body.classList.add('solto'), calmo ? 0 : 1900);
 }
 if (calmo) { $('#abertura').remove(); abrir(); }
 else {
@@ -1060,12 +1067,12 @@ const vigia = new IntersectionObserver(es => es.forEach(e => {
 $$('main > section, main > .faixa, main > .gigante, footer').forEach(el => vigia.observe(el));
 
 let pendentes = $$('.aparece, .palavras, .rod-logo, .revela, footer .orbita').filter(el => !el.hasAttribute('data-espera'));
-if (calmo) { pendentes.forEach(el => el.classList.add('ok')); pendentes = []; }
+if (calmo) { pendentes.forEach(el => el.classList.add('ok', 'solto')); pendentes = []; }
 function acende() {
   if (!pendentes.length) return;
   const lim = VH * .9;
   pendentes = pendentes.filter(el => {
-    if (onde(el).top < lim) { el.classList.add('ok'); return false; }
+    if (onde(el).top < lim) { el.classList.add('ok'); if (el.classList.contains('palavras')) setTimeout(() => el.classList.add('solto'), 2300); return false; }
     return true;
   });
 }
@@ -1221,7 +1228,7 @@ const gigantes = $$('#gigante .linha-g'), gigante = $('#gigante');
     inicio = t;
     palco.classList.add('vai');
     setTimeout(() => palco.classList.add('linhas-on'), 250);
-    setTimeout(() => titulo && titulo.classList.add('ok'), 950);
+    setTimeout(() => { if (titulo) { titulo.classList.add('ok'); setTimeout(() => titulo.classList.add('solto'), 2300); } }, 950);
     const n = cel ? 12 : 20;
     for (let i = 0; i < n; i++) {
       const s = document.createElementNS(NS, 'svg');
@@ -1238,7 +1245,7 @@ const gigantes = $$('#gigante .linha-g'), gigante = $('#gigante');
       ], { duration: 1500 + Math.random() * 700, delay: 100 + Math.random() * 250, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'forwards' }).onfinish = () => s.remove();
     }
   }
-  if (calmo) { palco.classList.add('vai', 'linhas-on'); if (titulo) titulo.classList.add('ok'); }
+  if (calmo) { palco.classList.add('vai', 'linhas-on'); if (titulo) titulo.classList.add('ok', 'solto'); }
 
   function gira(t) {
     const dt = Math.min(.05, (t - antes) / 1000); antes = t;
