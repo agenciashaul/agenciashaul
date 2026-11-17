@@ -493,6 +493,61 @@ footer{background:var(--fundo)}
 .gigante .cheia{color:transparent;background:linear-gradient(100deg,#f0dfc4,var(--caramelo) 50%,#8a7258);-webkit-background-clip:text;background-clip:text}
 .gigante .vazada{color:transparent;-webkit-text-stroke:1.5px rgba(198,189,169,.35)}
 
+/* ---- 03 trabalhos em órbita: as capas giram em 3 órbitas e cada uma é um link ---- */
+.og{position:relative;height:100vh;height:100svh;min-height:720px;padding:0;overflow:hidden;isolation:isolate;background:var(--fundo)}
+.og-topo{position:absolute;left:var(--borda);right:var(--borda);top:6.5rem;display:flex;justify-content:space-between;gap:2rem;z-index:400;pointer-events:none}
+.og-topo .num{margin:0}
+.og-topo p{max-width:22rem;text-align:right;color:var(--bege);font-size:.95rem}
+.og-centro{position:absolute;left:50%;top:50%;translate:-50% -50%;z-index:150;text-align:center;pointer-events:none;width:min(38rem,86vw)}
+.og-centro .titulo{margin:0 auto;max-width:14ch}
+.og-centro p{margin-top:1rem;color:var(--bege);font-size:.98rem}
+.og-astro{width:60px;height:60px;margin:0 auto 1.3rem;display:block;color:var(--caramelo);fill:currentColor;filter:drop-shadow(0 0 22px rgba(198,170,130,.8));animation:gira 18s linear infinite}
+.og-dica{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.3rem;font-size:.8rem;font-weight:800;color:var(--bege);padding:.35rem .8rem;border-radius:999px;background:var(--vidro);border:1px solid var(--vidro-borda);backdrop-filter:blur(10px)}
+.og-dica i{width:7px;height:7px;border-radius:50%;background:var(--caramelo);animation:pulsa 2s infinite}
+.og-linhas{position:absolute;inset:0;width:100%;height:100%;z-index:120;pointer-events:none;overflow:visible}
+.og-linhas ellipse{fill:none;stroke:var(--bege);stroke-width:1.1;opacity:.3;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 2.4s var(--suave)}
+.og.linhas-on .og-linhas ellipse{stroke-dashoffset:0}
+/* entrada: clarão no centro, ondas que se espalham e estrelas que explodem para fora */
+.og-flash{position:absolute;left:0;top:0;width:0;height:0;z-index:140;pointer-events:none}
+.og-flash .brilho{position:absolute;left:-260px;top:-260px;width:520px;height:520px;border-radius:50%;background:radial-gradient(closest-side,rgba(240,223,196,.75),rgba(173,145,113,.35) 35%,transparent 70%);opacity:0;transform:scale(0)}
+.og-flash .onda{position:absolute;left:-60px;top:-60px;width:120px;height:120px;border-radius:50%;border:1.5px solid rgba(230,211,182,.8);opacity:0;transform:scale(0)}
+.og.vai .og-flash .brilho{animation:ogBrilho 1.4s cubic-bezier(.16,1,.3,1) forwards}
+.og.vai .og-flash .onda{animation:ogOnda 1.6s cubic-bezier(.16,1,.3,1) forwards}
+.og.vai .og-flash .onda.b{animation-delay:.18s}
+.og.vai .og-flash .onda.c{animation-delay:.36s}
+@keyframes ogBrilho{0%{opacity:0;transform:scale(0)}25%{opacity:1;transform:scale(.9)}100%{opacity:0;transform:scale(1.6)}}
+@keyframes ogOnda{0%{opacity:.9;transform:scale(0)}100%{opacity:0;transform:scale(9)}}
+.og-astro,.og-sol{transform:scale(0) rotate(-180deg)}
+.og.vai .og-astro,.og.vai .og-sol{animation:ogPop 1.1s cubic-bezier(.34,1.56,.64,1) forwards,gira 18s linear 1.1s infinite}
+@keyframes ogPop{0%{transform:scale(0) rotate(-180deg)}60%{transform:scale(1.5) rotate(10deg)}100%{transform:scale(1) rotate(0)}}
+.og-faisca{position:absolute;left:0;top:0;width:16px;height:16px;margin:-8px 0 0 -8px;color:var(--caramelo);fill:currentColor;pointer-events:none;z-index:270;filter:drop-shadow(0 0 6px rgba(240,223,196,.9))}
+.og-faisca.clara{color:var(--off)}
+.og-centro .og-dica,.og-centro p{transition-delay:1.2s}
+.og-linhas ellipse:nth-child(2){transition-delay:.25s}
+.og-linhas ellipse:nth-child(3){transition-delay:.5s}
+.og-peca{position:absolute;left:0;top:0;width:var(--w,112px);aspect-ratio:4/5;border-radius:10px;text-decoration:none;will-change:transform,filter;opacity:0;transition:opacity 1.2s}
+.og-peca .foto{position:absolute;inset:0;border-radius:inherit;overflow:hidden;box-shadow:0 14px 34px rgba(0,0,0,.5),0 0 0 1px rgba(238,232,231,.08);transition:box-shadow .4s}
+.og-peca img{width:100%;height:100%;object-fit:cover;display:block}
+.og-peca .marca{position:absolute;right:-8px;top:-8px;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:var(--papel);color:var(--preto);font-weight:900;font-size:.7rem;box-shadow:0 4px 10px rgba(0,0,0,.4)}
+.og-peca .marca svg{width:14px;height:14px}
+.og-peca .rotulo{position:absolute;left:50%;bottom:-2.3rem;translate:-50% 6px;white-space:nowrap;font-size:.78rem;font-weight:800;background:var(--papel);color:var(--preto);padding:.32rem .7rem;border-radius:9px 3px 9px 3px;opacity:0;transition:opacity .3s,translate .4s var(--suave);pointer-events:none}
+.og-peca:hover .rotulo,.og-peca:focus-visible .rotulo{opacity:1;translate:-50% 0}
+.og-peca:hover .foto,.og-peca:focus-visible .foto{box-shadow:0 20px 50px rgba(0,0,0,.6),0 0 0 2px var(--caramelo),0 0 40px rgba(173,145,113,.45)}
+.og-peca:focus-visible{outline:none}
+.og-estrela{position:absolute;left:0;top:0;width:18px;height:18px;color:var(--caramelo);fill:currentColor;pointer-events:none;filter:drop-shadow(0 0 6px rgba(198,170,130,.9));will-change:transform}
+.og-estrela.clara{color:var(--off)}
+.og-sol{display:none;position:absolute;width:40px;height:40px;z-index:150;color:var(--caramelo);fill:currentColor;filter:drop-shadow(0 0 18px rgba(198,170,130,.85));pointer-events:none;animation:gira 18s linear infinite}
+@media (max-width:640px){
+  .og-topo{flex-direction:column;gap:.6rem;top:5rem}
+  .og-topo p{text-align:left;font-size:.85rem}
+  .og-centro{top:11rem;translate:-50% 0}
+  .og-centro .titulo{font-size:2.1rem}
+  .og-astro,.og-dica{display:none}
+  .og-centro p{font-size:.85rem;margin-top:.6rem}
+  .og-sol{display:block}
+}
+@media (prefers-reduced-motion:reduce){.og-astro,.og-sol,.og-dica i{animation:none}.og-linhas ellipse{stroke-dashoffset:0;transition:none}}
+
 /* ---- órbitas com estrelas (ideia de Shaul, 16/11): duas elipses tortas que se cruzam,
    com estrelas de 4 pontas dando a volta. As linhas se desenham quando aparecem. ---- */
 .orbita{position:absolute;pointer-events:none;overflow:visible}
@@ -675,36 +730,22 @@ footer{padding-top:9rem}
   </div>
 </section>
 
-<!-- 03 TRABALHOS: a janela cresce até a tela inteira -->
-<section class="vitrine" id="trabalhos">
-  <div class="palco luzes" style="--gx:50%;--gy:50%">
-    <div class="vetor v-linhas" aria-hidden="true"></div>
-    <div class="vit-topo" id="vitTopo">
-      <div class="num"><b>03</b> trabalhos</div>
-      <p>Capas e carrosséis feitos pela Shaul para o próprio perfil. Role para abrir.</p>
-    </div>
-    <div class="janela" id="janela">
-      <div class="mosaico" id="mosaico">
-        <img src="img/capa-mudou.webp" alt="Capa: O mercado mudou... E a sua empresa, ainda não?" loading="lazy">
-        <img src="img/capa-derrubou.webp" alt="Capa: A IA te indicou. O seu perfil te derrubou." loading="lazy">
-        <img src="img/capa-blackfriday.webp" alt="Capa: Seu perfil aguenta a Black Friday?" loading="lazy">
-        <img src="img/capa-golpista.webp" alt="Capa: O golpista tem um perfil mais bonito que o seu." loading="lazy">
-        <img src="img/capa-minimalista.webp" alt="Capa: Toda marca grande está ficando minimalista. E isso é de propósito." loading="lazy">
-        <img src="img/capa-carrossel.webp" alt="Capa: o chefe do Instagram mandou postar carrossel. E por quê?" loading="lazy">
-        <img src="img/capa-ia.webp" alt="Capa: seu concorrente já faz post com inteligência artificial. E você?" loading="lazy">
-        <img src="img/mudou-03.webp" alt="Slide do carrossel O mercado mudou" loading="lazy">
-      </div>
-    </div>
-    <span class="tag" data-x="-1" data-y="-.6" style="left:24%;top:30%">arte de posts</span>
-    <span class="tag escura" data-x="1" data-y="-.4" style="right:22%;top:40%">carrossel</span>
-    <span class="tag escura" data-x="-1" data-y=".5" style="left:21%;top:66%">gestão de perfil</span>
-    <span class="tag" data-x="1" data-y=".7" style="right:25%;top:78%">tráfego pago</span>
-    <div class="vit-final" id="vitFinal">
-      <h2 class="titulo">posts que já <em>saíram</em> daqui.</h2>
-      <p>O mesmo cuidado vai para o seu perfil, para ele vender por você.</p>
-      <a class="btn btn-claro ima" href="https://www.instagram.com/agenciashaul/" target="_blank" rel="noopener">ver todos no Instagram <span class="seta"><svg><use href="#i-seta"/></svg></span></a>
-    </div>
+<!-- 03 TRABALHOS: capas em órbita (teste de Shaul, 16/11). Versão anterior: site/arquivo/2026-11-16-site-v4-antes-das-orbitas.html -->
+<section class="og luzes" id="trabalhos" style="--gx:50%;--gy:52%">
+  <div class="og-topo">
+    <div class="num aparece"><b>03</b> trabalhos</div>
+    <p class="aparece">Cada peça em órbita é um post real. Clique para ver no Instagram ou no Behance.</p>
   </div>
+  <svg class="og-linhas" id="ogLinhas" aria-hidden="true"></svg>
+  <div class="og-centro">
+    <svg class="og-astro" aria-hidden="true"><use href="#s-estrela"/></svg>
+    <h2 class="titulo palavras" data-espera>posts que já <em>saíram</em> daqui.</h2>
+    <p class="aparece">O mesmo cuidado vai para o seu perfil, para ele vender por você.</p>
+    <span class="og-dica aparece"><i></i>passe o mouse numa peça para parar</span>
+  </div>
+  <svg class="og-sol" id="ogSol" aria-hidden="true"><use href="#s-estrela"/></svg>
+  <div class="og-flash" id="ogFlash" aria-hidden="true"><span class="brilho"></span><span class="onda"></span><span class="onda b"></span><span class="onda c"></span></div>
+  <div id="ogPecas"></div>
 </section>
 
 <!-- 04 UM CARROSSEL INTEIRO, NA HORIZONTAL -->
@@ -952,7 +993,7 @@ $$('[data-orbita]').forEach((svg, n) => {
   });
 });
 
-let pendentes = $$('.aparece, .palavras, .rod-logo, .revela, footer .orbita');
+let pendentes = $$('.aparece, .palavras, .rod-logo, .revela, footer .orbita').filter(el => !el.hasAttribute('data-espera'));
 if (calmo) { pendentes.forEach(el => el.classList.add('ok')); pendentes = []; }
 function acende() {
   if (!pendentes.length) return;
@@ -1027,6 +1068,156 @@ $$('[data-simbolos]').forEach(sec => {
 });
 const holofote = $('#holofote');
 const gigantes = $$('#gigante .linha-g'), gigante = $('#gigante');
+
+/* ---- 03 trabalhos em órbita ----
+   Cada capa é um link: o post no Instagram quando o link está anotado no quadro
+   (quadro/5-postado/), senão o perfil. Os painéis do Behance abrem o portfólio. */
+(() => {
+  const palco = $('#trabalhos.og');
+  if (!palco) return;
+  const IG = 'https://www.instagram.com/agenciashaul/', BE = 'https://www.behance.net/agenciashaul';
+  // Shaul (16/11): tirar o painel "poucos elementos" do Behance e pôr o do Homem-Aranha (KFC);
+  // a Black Friday vai no lugar da capa da IA (que saiu), sem repetir.
+  const pecas = [
+    { img: 'img/capa-blackfriday.webp', alt: 'Seu perfil aguenta a Black Friday?', link: IG, onde: 'ig' },
+    { img: 'img/capa-derrubou.webp', alt: 'A IA te indicou. O seu perfil te derrubou.', link: IG, onde: 'ig' },
+    { img: 'img/capa-golpista.webp', alt: 'O golpista tem um perfil mais bonito que o seu.', link: IG, onde: 'ig' },
+    { img: 'img/capa-mudou.webp', alt: 'O mercado mudou... E a sua empresa, ainda não?', link: IG, onde: 'ig' },
+    { img: 'img/capa-minimalista.webp', alt: 'Toda marca grande está ficando minimalista.', link: IG, onde: 'ig' },
+    { img: 'img/capa-carrossel.webp', alt: 'O chefe do Instagram mandou postar carrossel.', link: IG, onde: 'ig' },
+    { img: 'img/behance-capa.webp', alt: 'Portfólio no Behance: design que faz o cliente confiar e vender.', link: BE, onde: 'be' },
+    { img: 'img/capa-kfc-aranha.webp', alt: 'O KFC não fez o filme. Mas vai lucrar com ele.', link: IG, onde: 'ig' }
+  ];
+  // rx em fração da largura, ry em fração da altura
+  const aneis = [
+    { rx: .38, ry: .27, giro: -6, vel: .055, itens: [0, 1, 2], estrelas: [.12, .62] },
+    { rx: .25, ry: .30, giro: 22, vel: -.075, itens: [3, 4, 5], estrelas: [.4] },
+    { rx: .43, ry: .12, giro: -18, vel: .04, itens: [6, 7], estrelas: [.3, .8] }
+  ];
+  const caixa = $('#ogPecas'), linhas = $('#ogLinhas'), sol = $('#ogSol');
+  const corpos = [];
+  aneis.forEach((a, ai) => {
+    const el = document.createElementNS(NS, 'ellipse');
+    el.setAttribute('pathLength', '1');
+    linhas.append(el); a.linha = el; a.ang = ai * 1.3;
+    a.itens.forEach((pi, k) => {
+      const p = pecas[pi];
+      const ln = document.createElement('a');
+      ln.className = 'og-peca';
+      ln.href = p.link; ln.target = '_blank'; ln.rel = 'noopener';
+      ln.setAttribute('aria-label', (p.onde === 'be' ? 'Ver no Behance: ' : 'Ver no Instagram: ') + p.alt);
+      ln.innerHTML = `<span class="foto"><img src="${p.img}" alt="${p.alt}" loading="lazy"></span>` +
+        `<span class="marca">${p.onde === 'be' ? 'Bē' : '<svg><use href="#i-insta"/></svg>'}</span>` +
+        `<span class="rotulo">${p.onde === 'be' ? 'ver no Behance ↗' : 'ver no Instagram ↗'}</span>`;
+      caixa.append(ln);
+      corpos.push({ el: ln, anel: a, fase: (k / a.itens.length) * Math.PI * 2, peca: true, ordem: corpos.filter(c => c.peca).length });
+    });
+    a.estrelas.forEach((f, k) => {
+      const s = document.createElementNS(NS, 'svg');
+      s.setAttribute('class', 'og-estrela' + (k % 2 ? ' clara' : ''));
+      s.innerHTML = '<use href="#s-estrela"/>';
+      caixa.append(s);
+      corpos.push({ el: s, anel: a, fase: f * Math.PI * 2 + .4, peca: false, ordem: corpos.filter(c => !c.peca).length });
+    });
+  });
+
+  // parar quando o mouse ou o foco do teclado está numa peça
+  let alvo = 1, fator = calmo ? 0 : 1;
+  caixa.addEventListener('mouseover', e => { if (e.target.closest('.og-peca')) alvo = 0; });
+  caixa.addEventListener('mouseout', e => { if (e.target.closest('.og-peca')) alvo = 1; });
+  caixa.addEventListener('focusin', () => alvo = 0);
+  caixa.addEventListener('focusout', () => alvo = 1);
+
+  const flash = $('#ogFlash'), titulo = palco.querySelector('[data-espera]');
+  let W = 0, H = 0, cx = 0, cy = 0, tam = 112, cel = false;
+  function mede() {
+    W = palco.clientWidth; H = palco.clientHeight; cel = W < 640;
+    cx = W / 2; cy = H * (cel ? .63 : .5);
+    tam = cel ? 64 : W < 1000 ? 92 : 112;
+    linhas.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    sol.style.left = (cx - 20) + 'px'; sol.style.top = (cy - 20) + 'px';
+    flash.style.left = cx + 'px'; flash.style.top = cy + 'px';
+    corpos.forEach(c => { if (c.peca) c.el.style.setProperty('--w', tam + 'px'); });
+  }
+  addEventListener('resize', mede); mede();
+
+  // ---- entrada (Shaul, 16/11: "uma animação mais dahora na hora de aparecer as órbitas") ----
+  // clarão e ondas no centro, estrelinhas explodindo, as órbitas "levantam" de uma linha deitada
+  // e cada capa sai do centro girando em espiral até o seu lugar, uma depois da outra.
+  const easeOut = x => 1 - Math.pow(1 - x, 3);
+  const volta = x => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+  let antes = performance.now(), inicio = calmo ? -1e9 : null;
+  function comeca(t) {
+    inicio = t;
+    palco.classList.add('vai');
+    setTimeout(() => palco.classList.add('linhas-on'), 250);
+    setTimeout(() => titulo && titulo.classList.add('ok'), 950);
+    const n = cel ? 12 : 20;
+    for (let i = 0; i < n; i++) {
+      const s = document.createElementNS(NS, 'svg');
+      s.setAttribute('class', 'og-faisca' + (i % 3 ? '' : ' clara'));
+      s.innerHTML = '<use href="#s-estrela"/>';
+      caixa.append(s);
+      const ang = (i / n) * Math.PI * 2 + Math.random() * .3;
+      const dist = (cel ? 110 : 250) + Math.random() * (cel ? 80 : 230);
+      const tf = .5 + Math.random() * 1.1;
+      s.animate([
+        { transform: `translate(${cx}px,${cy}px) scale(0) rotate(0deg)`, opacity: 1 },
+        { transform: `translate(${cx + Math.cos(ang) * dist * .7}px,${cy + Math.sin(ang) * dist * .5}px) scale(${tf}) rotate(180deg)`, opacity: 1, offset: .55 },
+        { transform: `translate(${cx + Math.cos(ang) * dist}px,${cy + Math.sin(ang) * dist * .72}px) scale(0) rotate(320deg)`, opacity: 0 }
+      ], { duration: 1500 + Math.random() * 700, delay: 100 + Math.random() * 250, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'forwards' }).onfinish = () => s.remove();
+    }
+  }
+  if (calmo) { palco.classList.add('vai', 'linhas-on'); if (titulo) titulo.classList.add('ok'); }
+
+  function gira(t) {
+    const dt = Math.min(.05, (t - antes) / 1000); antes = t;
+    const r = palco.getBoundingClientRect();
+    if (inicio === null && r.top < innerHeight * .35 && r.bottom > innerHeight * .5) comeca(t);
+    if (r.bottom > -50 && r.top < innerHeight + 50) {
+      const it = inicio === null ? 0 : (t - inicio) / 1000;
+      const fy = .04 + .96 * volta(lim((it - .15) / 1.1));   // deitada -> de pé, passando um pouco
+      const fx = .3 + .7 * easeOut(lim((it - .05) / 1));
+      fator += ((calmo ? 0 : alvo) - fator) * .08;
+      const empurra = calmo ? 0 : Math.min(3, Math.abs(vel) * .6) * alvo;
+      const ax = (mx / innerWidth - .5), ay = (my / innerHeight - .5);
+      aneis.forEach(a => {
+        a.ang += a.vel * dt * (fator + empurra);
+        a.RX = a.rx * W * (cel ? 1.05 : 1) * fx;
+        a.RY = a.ry * H * (cel ? .62 : 1) * fy;
+        a.linha.setAttribute('cx', cx); a.linha.setAttribute('cy', cy);
+        a.linha.setAttribute('rx', a.RX.toFixed(1)); a.linha.setAttribute('ry', Math.max(0, a.RY).toFixed(1));
+        a.linha.setAttribute('transform', `rotate(${a.giro} ${cx} ${cy})`);
+      });
+      corpos.forEach(c => {
+        const a = c.anel, rr = a.giro * Math.PI / 180, lado = Math.sign(a.vel);
+        const atraso = c.peca ? .45 + c.ordem * .13 : .7 + c.ordem * .06;
+        const ci = lim((it - atraso) / 1.2), e = volta(ci), eo = easeOut(ci);
+        const th = a.ang + c.fase + (1 - eo) * 2.8 * lado;          // espiral: chega dando a volta
+        const ex = Math.cos(th) * a.RX, ey = Math.sin(th) * a.RY;
+        let x = cx + (ex * Math.cos(rr) - ey * Math.sin(rr)) * e;   // nasce do centro
+        let y = cy + (ex * Math.sin(rr) + ey * Math.cos(rr)) * e;
+        const d = (Math.sin(th) + 1) / 2; // 0 = atrás, 1 = na frente
+        x += ax * 40 * (d - .5); y += ay * 30 * (d - .5);
+        const vis = lim(ci * 4);
+        if (c.peca) {
+          const esc = (.62 + d * .5) * (.12 + .88 * eo);
+          const rot = Math.cos(th) * -4 + (1 - eo) * -420 * lado;
+          c.el.style.transform = `translate3d(${(x - tam / 2).toFixed(1)}px,${(y - tam * .625).toFixed(1)}px,0) scale(${esc.toFixed(3)}) rotate(${rot.toFixed(2)}deg)`;
+          c.el.style.opacity = vis;
+          c.el.style.zIndex = d > .5 ? 200 + Math.round(d * 100) : 100 + Math.round(d * 40);
+          c.el.style.filter = d < .4 ? `blur(${((.4 - d) * 5).toFixed(2)}px) brightness(${(.55 + d).toFixed(2)})` : (ci < 1 ? `brightness(${(1 + (1 - eo) * .8).toFixed(2)})` : 'none');
+        } else {
+          c.el.style.transform = `translate3d(${(x - 9).toFixed(1)}px,${(y - 9).toFixed(1)}px,0) scale(${((.6 + d * .8) * eo).toFixed(2)})`;
+          c.el.style.opacity = vis;
+          c.el.style.zIndex = d > .5 ? 260 : 110;
+        }
+      });
+    }
+    requestAnimationFrame(gira);
+  }
+  requestAnimationFrame(gira);
+})();
 
 /* ---- rolagem suave: a página desliza e freia devagar (só no computador) ---- */
 const maxRola = () => document.documentElement.scrollHeight - innerHeight;
@@ -1142,6 +1333,7 @@ function quadro() {
       el.style.translate = `${-ax * f}px ${-ay * f - y * .25}px`;
     });
 
+    if (jan) {
     // vitrine: a janela abre até a tela inteira
     const p = progresso(vit);
     const a = suave(lim(p / .62));
@@ -1169,6 +1361,7 @@ function quadro() {
       t.style.transform = `translate3d(${dx * a * vw * .3}px,${dy * a * vh * .5}px,0) rotate(${dx * a * 8}deg)`;
       t.style.opacity = 1 - lim(a * 1.6);
     });
+    }
 
     // carrossel horizontal
     const ph = progresso(hor);
@@ -1207,7 +1400,7 @@ function cursor() {
 if (!toque && !calmo) {
   cur.style.opacity = 1; cursor();
   document.addEventListener('mouseover', e => {
-    const img = e.target.closest('.mosaico img, .slide, .flutua');
+    const img = e.target.closest('.mosaico img, .slide, .flutua, .og-peca');
     const lk = e.target.closest('a, button, .serv');
     cur.classList.toggle('ver', !!img);
     cur.classList.toggle('link', !img && !!lk);
@@ -1252,9 +1445,11 @@ if (!toque && !calmo) {
 
 if (calmo) {
   // tudo aberto e parado: vitrine aberta e carrossel com rolagem lateral comum
+  if (jan) {
   jan.style.setProperty('--t', '0%'); jan.style.setProperty('--b', '0%'); jan.style.setProperty('--l', '0%'); jan.style.setProperty('--r', '0px');
   mos.style.setProperty('--z', 1); jan.style.setProperty('--veu', .72); vitFinal.style.setProperty('--fim', 1); vitFinal.style.pointerEvents = 'auto';
   vit.style.height = '100vh'; vitTopo.style.opacity = 0; tags.forEach(t => t.style.display = 'none');
+  }
   hor.style.height = 'auto'; hor.querySelector('.h-palco').style.cssText = 'position:relative;height:auto;padding:6rem 0;overflow-x:auto';
   $('.h-barra').style.display = 'none';
   $$('.passo').forEach(s => s.classList.add('aceso')); $('#trilha').parentElement.style.setProperty('--p', 1);
