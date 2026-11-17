@@ -1380,7 +1380,7 @@ function quadro() {
   // menu
   nav.classList.toggle('rolou', y > 40);
   zap.classList.toggle('on', y > vh * .7);
-  if (Math.abs(y - ultimo) > 2) nav.classList.toggle('some', y > ultimo && y > 400);
+  // o menu fica sempre à vista (Shaul, 17/11); antes ele sumia ao descer a página
   vel += (y - ultimo) * .04; ultimo = y;
 
   if (!calmo) {
