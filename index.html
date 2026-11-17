@@ -565,9 +565,17 @@ footer{background:var(--fundo)}
    do "p" e do "q" passa da caixa e sumia (Shaul, 17/11). A folga embaixo cobre essas pernas. */
 .titulo em,.ad .depois em,.h-fim p em,.form h3 em,.hero h1 em,.og-centro h2 em,.gigante .cheia{padding-bottom:.22em;margin-bottom:-.22em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .gigante .linha-g{padding-bottom:.12em}
+/* palavra gigante é itálica: a ponta das letras sai para a direita e o "ç" desce muito.
+   Folga generosa em volta, para o dourado pintar a letra inteira (Shaul, 17/11: "olha o s e o ç cortado") */
+.gigante .cheia,.gigante .vazada{padding:.12em .22em .42em .06em;margin:-.12em -.22em -.42em -.06em}
+/* todas as palavras douradas em itálico: folga à direita para a ponta inclinada */
+.titulo em,.ad .depois em,.h-fim p em,.form h3 em,.hero h1 em,.og-centro h2 em{padding-right:.16em;margin-right:-.1em}
 /* a máscara que faz a palavra subir também cortava as pernas das letras: mais folga embaixo */
-.palavras .w{padding-bottom:.24em;margin-bottom:-.24em}
-.mascara{padding-bottom:.18em;margin-bottom:-.18em}
+.palavras .w{padding:.12em 0 .32em;margin:-.12em 0 -.32em}
+.mascara{padding:.16em 0 .34em;margin:-.16em 0 -.34em}
+/* com a folga maior, a palavra escondida desce mais para não aparecer antes da hora */
+.mascara > span,.palavras .w > span{transform:translateY(150%)}
+.pronto .mascara > span,.palavras.ok .w > span{transform:none}
 
 /* parte que está fora da tela descansa: animações pausadas e ícones flutuantes escondidos
    (ninguém vê, e eles continuavam ocupando a placa de vídeo) */
@@ -700,7 +708,7 @@ footer{padding-top:9rem}
     <h1>
       <span class="mascara linha"><span>seu produto é bom. mas o seu perfil</span></span>
       <span class="mascara grande"><span style="transition-delay:.12s"><span class="letras" aria-label="passa"><span style="--i:0">p</span><span style="--i:1">a</span><span style="--i:2">s</span><span style="--i:3">s</span><span style="--i:4">a</span></span></span></span>
-      <span class="mascara grande recuo" style="padding-bottom:.4em;margin-bottom:-.4em"><span style="transition-delay:.22s"><span class="palavra-selo"><em>confiança?</em><span class="selo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 2l16 9.5-7 1.6 4.2 7.4-3 1.6-4.1-7.4L5 19z" fill="#EEE8E7" stroke="#1E1F1F" stroke-width="1.4" stroke-linejoin="round"/></svg><span>@agenciashaul</span></span></span></span></span>
+      <span class="mascara grande recuo" style="padding:.16em 0 .4em;margin:-.16em 0 -.4em"><span style="transition-delay:.22s"><span class="palavra-selo"><em>confiança?</em><span class="selo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 2l16 9.5-7 1.6 4.2 7.4-3 1.6-4.1-7.4L5 19z" fill="#EEE8E7" stroke="#1E1F1F" stroke-width="1.4" stroke-linejoin="round"/></svg><span>@agenciashaul</span></span></span></span></span>
     </h1>
     <div class="hero-base aparece-hero">
       <p class="hero-texto">Quem entra no seu perfil decide rápido se compra de você. <b>Nós criamos os posts, os carrosséis e cuidamos do seu Instagram para você vender mais:</b> mais gente confiando, mais clientes chamando no seu WhatsApp.</p>
