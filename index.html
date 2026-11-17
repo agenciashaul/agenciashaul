@@ -436,7 +436,7 @@ main > section,.h-palco,.palco{isolation:isolate}
   .pilula{font-size:.75rem}
   .gigante{padding:3.5rem 0}
 }
-@media (prefers-reduced-motion:reduce){.sim > *,.pilula i,.hero-rodape .desce span{animation:none}}
+@media (prefers-reduced-motion:reduce){.sim,.pilula i,.hero-rodape .desce span{animation:none}}
 .hero-botoes{justify-content:center;margin-top:2rem}
 .hero-rodape{position:absolute;left:var(--borda);right:var(--borda);bottom:1.6rem;z-index:3;display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.7rem .8rem .7rem 1.1rem;border-radius:14px;background:var(--vidro);border:1px solid var(--vidro-borda);backdrop-filter:blur(12px);font-size:.85rem;color:var(--bege)}
 .hero-rodape a{color:var(--bege);text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;font-weight:700}
@@ -451,12 +451,12 @@ main > section,.h-palco,.palco{isolation:isolate}
 .simbolos{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
 .sim{position:absolute;display:grid;place-items:center;color:var(--caramelo);will-change:transform;opacity:0;transition:opacity 1.6s ease}
 .pronto .sim{opacity:var(--o,.6)}
-.sim > *{animation:flutua var(--t,9s) ease-in-out infinite;animation-delay:var(--a,0s)}
+/* o boiar fica na caixa do ícone, com translate/rotate próprios: a placa de vídeo anima sozinha */
 .sim svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .sim .caixinha{position:absolute;inset:0;display:grid;place-items:center;border-radius:28%;background:var(--vidro);border:1px solid var(--vidro-borda);color:var(--bege)}
 .sim .caixinha svg{width:52%;height:52%}
 .sim .arroba{font-weight:800;font-size:calc(var(--s) * .55);color:var(--bege);line-height:1}
-@keyframes flutua{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-14px) rotate(var(--g,6deg))}}
+@keyframes flutua{0%,100%{translate:0 0;rotate:0deg}50%{translate:0 -14px;rotate:6deg}}
 
 /* seções claras de antes, agora no escuro */
 .dor .v-montanha,.passos .v-montanha{color:var(--caramelo);opacity:.16}
@@ -550,6 +550,21 @@ footer{background:var(--fundo)}
   .og-sol{display:block}
 }
 @media (prefers-reduced-motion:reduce){.og-astro,.og-sol,.og-dica i{animation:none}.og-linhas ellipse{stroke-dashoffset:0;transition:none}}
+
+/* ---- fluidez (Shaul, 17/11: "qualidade mas com fluidez, sem travar") ----
+   Mesma aparência, menos trabalho para a placa de vídeo:
+   - o granulado fica parado e sem mistura de cor (antes repintava a tela inteira 4x por segundo);
+   - os cartões de vidro usam um fundo um pouco mais sólido no lugar do desfoque do que está atrás
+     (com os ícones se mexendo atrás, o desfoque era refeito a cada quadro). */
+.grao{mix-blend-mode:normal;opacity:.045;animation:none;inset:0}
+.vidro,.ad,.passo .caixa,.form,.h-fim,.serv .ir,.passo .bola{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:rgba(46,43,38,.78)!important}
+.passo.aceso .bola{background:var(--caramelo)!important}
+.serv:hover .ir{background:var(--caramelo)!important}
+.btn-linha{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(56,52,46,.62)}
+/* parte que está fora da tela descansa: animações pausadas e ícones flutuantes escondidos
+   (ninguém vê, e eles continuavam ocupando a placa de vídeo) */
+.fora *,.fora *::before,.fora *::after{animation-play-state:paused!important}
+.fora .simbolos{visibility:hidden}
 
 /* ---- órbitas com estrelas (ideia de Shaul, 16/11): duas elipses tortas que se cruzam,
    com estrelas de 4 pontas dando a volta. As linhas se desenham quando aparecem. ---- */
@@ -906,6 +921,11 @@ footer{padding-top:9rem}
 
 <script>
 const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* tamanho da janela e posição da rolagem guardados em variáveis: ler innerWidth/innerHeight/scrollY
+   durante os quadros obriga o navegador a recalcular a página (era o que mais travava). */
+let VW = innerWidth, VH = innerHeight, yRola = scrollY;
+addEventListener('resize', () => { VW = innerWidth; VH = innerHeight; yRola = scrollY; });
+addEventListener('scroll', () => { yRola = scrollY; }, { passive: true });
 const toque = matchMedia('(hover: none), (pointer: coarse)').matches;
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const lim = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -996,13 +1016,40 @@ $$('[data-orbita]').forEach((svg, n) => {
   });
 });
 
+/* ---- memória das posições (fluidez, Shaul 16/11: "qualidade mas com fluidez") ----
+   Perguntar ao navegador "onde está isto?" a cada quadro obriga ele a recalcular a página
+   inteira. Aqui cada posição é medida uma vez e reaproveitada; mede de novo só quando a
+   página muda de tamanho, quando uma imagem ou a fonte termina de carregar. */
+let memo = new Map();
+const esquece = () => { memo = new Map(); };
+// posição da rolagem lida uma vez por quadro (ler scrollY no meio do quadro também recalcula a página)
+let yAgora = scrollY;
+function onde(el) {
+  let m = memo.get(el);
+  if (!m) { const r = el.getBoundingClientRect(); m = { t: r.top + yAgora, h: r.height }; memo.set(el, m); }
+  const top = m.t - yAgora;
+  return { top, bottom: top + m.h, height: m.h };
+}
+addEventListener('resize', esquece);
+addEventListener('load', esquece);
+document.addEventListener('load', e => { if (e.target.tagName === 'IMG') esquece(); }, true);
+if (document.fonts) document.fonts.ready.then(esquece);
+
+// marca com "fora" a parte que saiu da tela (com uma folga), para ela descansar
+const vigia = new IntersectionObserver(es => es.forEach(e => {
+  e.target.classList.toggle('fora', !e.isIntersecting);
+  // as estrelas que dão a volta nas órbitas (topo e rodapé) também param fora da tela
+  e.target.querySelectorAll('svg[data-orbita]').forEach(s => { try { e.isIntersecting ? s.unpauseAnimations() : s.pauseAnimations(); } catch (_) {} });
+}), { rootMargin: '60px 0px' });
+$$('main > section, main > .faixa, main > .gigante, footer').forEach(el => vigia.observe(el));
+
 let pendentes = $$('.aparece, .palavras, .rod-logo, .revela, footer .orbita').filter(el => !el.hasAttribute('data-espera'));
 if (calmo) { pendentes.forEach(el => el.classList.add('ok')); pendentes = []; }
 function acende() {
   if (!pendentes.length) return;
-  const lim = innerHeight * .9;
+  const lim = VH * .9;
   pendentes = pendentes.filter(el => {
-    if (el.getBoundingClientRect().top < lim) { el.classList.add('ok'); return false; }
+    if (onde(el).top < lim) { el.classList.add('ok'); return false; }
     return true;
   });
 }
@@ -1020,9 +1067,13 @@ const tags = $$('.vitrine .tag');
 /* ---- carrossel horizontal ---- */
 const hor = $('#horiz'), hTr = $('#hTrilho');
 let hDist = 0;
+let slidesGeo = [];
 function mede() {
   hDist = Math.max(0, hTr.scrollWidth - innerWidth);
   hor.style.height = (hDist + innerHeight) + 'px';
+  // posição de cada slide dentro do trilho (não muda com o deslize, só com o tamanho da tela)
+  slidesGeo = [...hTr.querySelectorAll('.slide, .h-fim')].map(s => ({ x: s.offsetLeft + s.offsetWidth / 2 }));
+  esquece();
 }
 addEventListener('resize', mede); addEventListener('load', mede); mede();
 
@@ -1034,8 +1085,8 @@ let mx = innerWidth / 2, my = innerHeight / 2, cx = mx, cy = my;
 addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; }, { passive: true });
 
 const progresso = el => {
-  const r = el.getBoundingClientRect();
-  return lim(-r.top / (r.height - innerHeight));
+  const r = onde(el);
+  return lim(-r.top / (r.height - VH));
 };
 
 /* ---- símbolos do Instagram espalhados em profundidade ----
@@ -1175,22 +1226,27 @@ const gigantes = $$('#gigante .linha-g'), gigante = $('#gigante');
 
   function gira(t) {
     const dt = Math.min(.05, (t - antes) / 1000); antes = t;
-    const r = palco.getBoundingClientRect();
-    if (inicio === null && r.top < innerHeight * .35 && r.bottom > innerHeight * .5) comeca(t);
-    if (r.bottom > -50 && r.top < innerHeight + 50) {
+    const r = onde(palco);
+    if (inicio === null && r.top < VH * .35 && r.bottom > VH * .5) comeca(t);
+    if (r.bottom > -50 && r.top < VH + 50) {
       const it = inicio === null ? 0 : (t - inicio) / 1000;
       const fy = .04 + .96 * volta(lim((it - .15) / 1.1));   // deitada -> de pé, passando um pouco
       const fx = .3 + .7 * easeOut(lim((it - .05) / 1));
       fator += ((calmo ? 0 : alvo) - fator) * .08;
       const empurra = calmo ? 0 : Math.min(3, Math.abs(vel) * .6) * alvo;
-      const ax = (mx / innerWidth - .5), ay = (my / innerHeight - .5);
+      const ax = (mx / VW - .5), ay = (my / VH - .5);
       aneis.forEach(a => {
         a.ang += a.vel * dt * (fator + empurra);
         a.RX = a.rx * W * (cel ? 1.05 : 1) * fx;
         a.RY = a.ry * H * (cel ? .62 : 1) * fy;
-        a.linha.setAttribute('cx', cx); a.linha.setAttribute('cy', cy);
-        a.linha.setAttribute('rx', a.RX.toFixed(1)); a.linha.setAttribute('ry', Math.max(0, a.RY).toFixed(1));
-        a.linha.setAttribute('transform', `rotate(${a.giro} ${cx} ${cy})`);
+        // a linha só é redesenhada quando muda de tamanho (na entrada ou ao mudar a janela)
+        const chave = `${cx}|${cy}|${a.RX.toFixed(1)}|${Math.max(0, a.RY).toFixed(1)}`;
+        if (a.chave !== chave) {
+          a.chave = chave;
+          a.linha.setAttribute('cx', cx); a.linha.setAttribute('cy', cy);
+          a.linha.setAttribute('rx', a.RX.toFixed(1)); a.linha.setAttribute('ry', Math.max(0, a.RY).toFixed(1));
+          a.linha.setAttribute('transform', `rotate(${a.giro} ${cx} ${cy})`);
+        }
       });
       corpos.forEach(c => {
         const a = c.anel, rr = a.giro * Math.PI / 180, lado = Math.sign(a.vel);
@@ -1207,13 +1263,18 @@ const gigantes = $$('#gigante .linha-g'), gigante = $('#gigante');
           const esc = (.62 + d * .5) * (.12 + .88 * eo);
           const rot = Math.cos(th) * -4 + (1 - eo) * -420 * lado;
           c.el.style.transform = `translate3d(${(x - tam / 2).toFixed(1)}px,${(y - tam * .625).toFixed(1)}px,0) scale(${esc.toFixed(3)}) rotate(${rot.toFixed(2)}deg)`;
-          c.el.style.opacity = vis;
-          c.el.style.zIndex = d > .5 ? 200 + Math.round(d * 100) : 100 + Math.round(d * 40);
-          c.el.style.filter = d < .4 ? `blur(${((.4 - d) * 5).toFixed(2)}px) brightness(${(.55 + d).toFixed(2)})` : (ci < 1 ? `brightness(${(1 + (1 - eo) * .8).toFixed(2)})` : 'none');
+          // opacidade e camada só mudam quando o valor muda (cada troca obriga o navegador a refazer o estilo)
+          const op = vis.toFixed(2), zi = d > .5 ? 200 + Math.round(d * 8) * 10 : 100 + Math.round(d * 4) * 10;
+          if (c.op !== op) { c.el.style.opacity = op; c.op = op; }
+          if (c.zi !== zi) { c.el.style.zIndex = zi; c.zi = zi; }
+          // filtro em degraus: só troca quando muda de faixa (trocar a cada quadro obriga a repintar a capa)
+          const fil = d < .4 ? `blur(${(Math.round((.4 - d) * 5 / .5) * .5).toFixed(1)}px) brightness(${(Math.round((.55 + d) * 10) / 10).toFixed(1)})` : (ci < 1 ? `brightness(${(Math.round((1 + (1 - eo) * .8) * 10) / 10).toFixed(1)})` : 'none');
+          if (c.fil !== fil) { c.el.style.filter = fil; c.fil = fil; }
         } else {
           c.el.style.transform = `translate3d(${(x - 9).toFixed(1)}px,${(y - 9).toFixed(1)}px,0) scale(${((.6 + d * .8) * eo).toFixed(2)})`;
-          c.el.style.opacity = vis;
-          c.el.style.zIndex = d > .5 ? 260 : 110;
+          const op = vis.toFixed(2), zi = d > .5 ? 260 : 110;
+          if (c.op !== op) { c.el.style.opacity = op; c.op = op; }
+          if (c.zi !== zi) { c.el.style.zIndex = zi; c.zi = zi; }
         }
       });
     }
@@ -1223,7 +1284,11 @@ const gigantes = $$('#gigante .linha-g'), gigante = $('#gigante');
 })();
 
 /* ---- rolagem suave: a página desliza e freia devagar (só no computador) ---- */
-const maxRola = () => document.documentElement.scrollHeight - innerHeight;
+// altura total da página, guardada na memória (perguntar a cada quadro recalcula a página)
+const maxRola = () => {
+  if (!memo.has(document)) memo.set(document, { h: document.documentElement.scrollHeight });
+  return memo.get(document).h - VH;
+};
 let alvo = scrollY, atual = scrollY, deslizando = false;
 const suaveOn = !toque && !calmo;
 if (suaveOn) {
@@ -1250,9 +1315,9 @@ function desliza() {
   if (Math.abs(falta) > .4) {
     deslizando = true;
     atual += falta * .075;
-    scrollTo(0, atual);
+    scrollTo(0, atual); yRola = atual;
   } else if (deslizando) {
-    atual = alvo; scrollTo(0, atual);
+    atual = alvo; scrollTo(0, atual); yRola = atual;
     requestAnimationFrame(() => deslizando = false);
   }
 }
@@ -1263,14 +1328,22 @@ const heroTit = $('.hero h1'), heroBase = $('.hero-base');
 const faixa2 = $('#faixa2'); let fx2 = null;
 const tiles = $$('#mosaico img');
 const slides = $$('.slide, .h-fim');
+const barraH = $('#hLinha').parentElement.parentElement, contaH = $('#hConta');
+const listaP = $('#listaPassos'), trilhaP = $('#trilha').parentElement, passosEl = $$('.passo');
 const rodam = $$('[data-rola]');
 let hSuave = 0, hVel = 0;
 
+let yAnt = -1, cxAnt = -1, cyAnt = -1, quadroN = 0;
 function quadro() {
   desliza();
-  const y = scrollY, vh = innerHeight, vw = innerWidth;
-  if (!document.body.classList.contains('carregando')) acende();
-  barraTopo.style.transform = `scaleX(${lim(y / maxRola())})`;
+  const y = yRola, vh = VH, vw = VW;
+  yAgora = y;
+  // só refaz o que depende da rolagem e do mouse quando um dos dois mexeu
+  // (e de vez em quando, para pegar mudanças de tamanho da página)
+  const mexeu = Math.abs(y - yAnt) > .3 || Math.abs(cx - cxAnt) > .3 || Math.abs(cy - cyAnt) > .3 || quadroN++ % 30 === 0;
+  yAnt = y; cxAnt = cx; cyAnt = cy;
+  if (mexeu && !document.body.classList.contains('carregando')) acende();
+  if (mexeu) barraTopo.style.transform = `scaleX(${lim(y / maxRola()).toFixed(4)})`;
 
   // menu
   nav.classList.toggle('rolou', y > 40);
@@ -1282,13 +1355,18 @@ function quadro() {
     const ax = (cx / vw - .5), ay = (cy / vh - .5);
     // faixa
     vel *= .9;
-    // uma faixa só, com os serviços (Shaul, 16/11)
-    const meia2 = faixa2.scrollWidth / 2;
+    // uma faixa só, com os serviços (Shaul, 16/11); parada quando está fora da tela
+    if (!faixa2.parentElement.classList.contains('fora')) {
+    // largura da faixa medida uma vez (perguntar a largura a cada quadro recalcula a página)
+    if (!memo.has(faixa2)) memo.set(faixa2, { w: faixa2.scrollWidth });
+    const meia2 = memo.get(faixa2).w / 2;
     if (fx2 === null) fx2 = -meia2;
     fx2 += .5 + Math.abs(vel) * 1;
     if (fx2 > 0) fx2 -= meia2;
-    faixa2.style.transform = `translate3d(${fx2}px,0,0) skewX(${lim(vel * .6, -8, 8)}deg)`;
+    faixa2.style.transform = `translate3d(${fx2.toFixed(1)}px,0,0) skewX(${lim(vel * .6, -8, 8).toFixed(2)}deg)`;
+    }
 
+    if (mexeu) {
     // topo: o título desce mais devagar e some ao rolar
     if (y < vh * 1.2) {
       const s = y / vh;
@@ -1302,7 +1380,7 @@ function quadro() {
     const caixas = new Map();
     simbolos.forEach(o => {
       let r = caixas.get(o.sec);
-      if (!r) { r = o.sec.getBoundingClientRect(); caixas.set(o.sec, r); }
+      if (!r) { r = onde(o.sec); caixas.set(o.sec, r); }
       if (r.bottom < -100 || r.top > vh + 100) return;
       const k = .25 + o.d * 1.5;
       const sy = (r.top + r.height / 2 - vh / 2) * o.d * -.3;
@@ -1311,10 +1389,12 @@ function quadro() {
     // holofote do topo segue o mouse devagar
     if (holofote) holofote.style.transform = `translate3d(${ax * 90}px,${ay * 60 + y * .2}px,0)`;
     // palavra gigante anda para os lados com a rolagem
-    const rg = gigante.getBoundingClientRect();
+    const rg = onde(gigante);
     if (rg.bottom > 0 && rg.top < vh) gigantes.forEach(l => {
       const dir = parseFloat(l.dataset.dir);
-      const base = dir > 0 ? -l.scrollWidth * .35 : -l.scrollWidth * .05;
+      if (!memo.has(l)) memo.set(l, { w: l.scrollWidth });
+      const lw = memo.get(l).w;
+      const base = dir > 0 ? -lw * .35 : -lw * .05;
       l.style.transform = `translate3d(${base + (vh - rg.top) * .45 * dir}px,0,0)`;
     });
 
@@ -1323,7 +1403,7 @@ function quadro() {
 
     // profundidade
     camadas.forEach(el => {
-      const r = el.parentElement.getBoundingClientRect();
+      const r = onde(el.parentElement);
       if (r.bottom < -200 || r.top > vh + 200) return;
       const meio = r.top + r.height / 2 - vh / 2;
       const v = parseFloat(el.dataset.vel);
@@ -1331,10 +1411,7 @@ function quadro() {
       const g = parseFloat(el.dataset.gira || 0);
       el.style.transform = `translate3d(${-ax * f}px,${meio * -v - ay * f}px,0)` + (g ? ` rotate(${g}deg)` : '');
     });
-    $$('.etiqueta').forEach(el => {
-      const f = parseFloat(el.dataset.fundo);
-      el.style.translate = `${-ax * f}px ${-ay * f - y * .25}px`;
-    });
+    }
 
     if (jan) {
     // vitrine: a janela abre até a tela inteira
@@ -1367,28 +1444,35 @@ function quadro() {
     }
 
     // carrossel horizontal
-    const ph = progresso(hor);
-    // o trilho corre um pouco atrasado (amortecido) e os slides giram em 3D perto das bordas
-    const hAntes = hSuave;
-    hSuave += (ph * hDist - hSuave) * .12;
-    hVel += ((hSuave - hAntes) - hVel) * .2;
-    hTr.style.transform = `translate3d(${-hSuave}px,0,0)`;
-    let perto = 1, menor = 9;
-    slides.forEach((s, i) => {
-      const r = s.getBoundingClientRect();
-      const d = lim(((r.left + r.width / 2) - vw / 2) / vw, -1, 1);
-      if (i < 8 && Math.abs(d) < menor) { menor = Math.abs(d); perto = i + 1; }
-      s.style.transform = `rotateY(${-d * 28}deg) scale(${1 - Math.abs(d) * .14}) skewX(${lim(-hVel * .15, -6, 6)}deg)`;
-      s.style.opacity = 1 - Math.abs(d) * .35;
-    });
-    $('#hLinha').parentElement.parentElement.style.setProperty('--p', ph);
-    $('#hConta').textContent = String(perto).padStart(2, '0');
+    // só mexe no carrossel quando ele está na tela
+    const rh = onde(hor);
+    if (rh.bottom > -50 && rh.top < vh + 50) {
+      const ph = progresso(hor);
+      // o trilho corre um pouco atrasado (amortecido) e os slides giram em 3D perto das bordas
+      const hAntes = hSuave;
+      hSuave += (ph * hDist - hSuave) * .12;
+      hVel += ((hSuave - hAntes) - hVel) * .2;
+      hTr.style.transform = `translate3d(${(-hSuave).toFixed(1)}px,0,0)`;
+      let perto = 1, menor = 9;
+      slides.forEach((s, i) => {
+        const g = slidesGeo[i]; if (!g) return;
+        const d = lim((g.x - hSuave - vw / 2) / vw, -1, 1);
+        if (i < 8 && Math.abs(d) < menor) { menor = Math.abs(d); perto = i + 1; }
+        s.style.transform = `rotateY(${(-d * 28).toFixed(2)}deg) scale(${(1 - Math.abs(d) * .14).toFixed(3)}) skewX(${lim(-hVel * .15, -6, 6).toFixed(2)}deg)`;
+        s.style.opacity = (1 - Math.abs(d) * .35).toFixed(3);
+      });
+      barraH.style.setProperty('--p', ph.toFixed(4));
+      const txt = String(perto).padStart(2, '0');
+      if (contaH.textContent !== txt) contaH.textContent = txt;
+    }
 
     // como funciona: a linha enche e acende cada passo
-    const lp = $('#listaPassos').getBoundingClientRect();
-    const pp = lim((vh * .75 - lp.top) / (lp.height * .9));
-    $('#trilha').parentElement.style.setProperty('--p', pp);
-    $$('.passo').forEach((s, i) => s.classList.toggle('aceso', pp >= i / 2 - .02));
+    const lp = onde(listaP);
+    if (lp.bottom > -50 && lp.top < vh + 50) {
+      const pp = lim((vh * .75 - lp.top) / (lp.height * .9));
+      trilhaP.style.setProperty('--p', pp.toFixed(4));
+      passosEl.forEach((s, i) => s.classList.toggle('aceso', pp >= i / 2 - .02));
+    }
   }
   requestAnimationFrame(quadro);
 }
